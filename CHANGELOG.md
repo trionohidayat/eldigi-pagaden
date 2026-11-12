@@ -1,0 +1,30 @@
+# Changelog
+
+Semua perubahan penting pada proyek **ElDigi Pagaden** (Simulasi E-Voting Pilkades Desa Pagaden) dicatat dalam dokumen ini.
+Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/) dan mematuhi [Semantic Versioning](https://semver.org/lang/id/).
+
+## [Unreleased]
+
+## [0.2.0] - 2026-11-13
+
+### Added
+- **Layar Scan QR Gerbang Pemilih (`QRScannerGate`)**: Pemindaian QR kartu suara via kamera langsung (webcam/HP) menggunakan `jsQR` dan dukungan pemindai barcode USB/manual NIK sebelum membuka surat suara.
+- **Fitur Cetak Kartu QR Pemilih (`/cetak-qr`)**: Halaman cetak kartu pemilih format resmi C6 digital dilengkapi kode QR vektor tajam berbasis DPT untuk pencetakan kertas A4.
+- **Nama dan Gelar Kandidat**: Menampilkan nama lengkap dan gelar resmi di bawah foto pada kartu surat suara fisik digital.
+- **Layar Cetak Struk Minimalis (`ThermalReceipt`)**: Desain ulang simulasi struk termal VVPAT layar penuh yang bersih, transparan, dan otomatis beralih kembali ke pemindai QR untuk pemilih berikutnya.
+- **Lambang Resmi Kabupaten Subang (`CrestSubang`)**: Komponen vektor SVG presisi lambang daerah dengan moto *Karya Bhumi Bhakti*.
+- **Drawer Menu Kiosk Panitia (`KioskDrawer`)**: Akses tersembunyi bagi petugas KPPS untuk membuka Meja KPPS, Rekapitulasi Suara, Cetak QR, dan Reset Data.
+- **Unit Testing Lengkap**: 30 pengujian unit otomatis mencakup validasi DPT, data kandidat, lambang daerah, komponen kartu suara, utilitas QR, struk VVPAT, dan kartu cetak.
+
+### Changed
+- **Redesign Presisi 100% Surat Suara**: Tampilan bilik suara dibuat minimalis sesuai gambar referensi kertas suara resmi berlatar gradasi *mint* lembut dan tombol bilah bawah `PILIH KANDIDAT INI`.
+- **Alur Pemilihan Dua Tahap**: Menyentuh kartu calon hanya memilih kandidat tanpa langsung memunculkan popup konfirmasi; popup baru muncul ketika tombol merah bawah ditekan.
+- **Branch Default Git**: Migrasi cabang utama git lokal dari `master` ke `main`.
+- **Integrasi Pas Foto Calon No. 02**: Menampilkan pas foto resmi berlatar belakang merah untuk Calon No. 02 (Uly Emarita AD, S.E., M.M.).
+
+### Removed
+- **Fitur Suara & Audio**: Menghapus seluruh efek suara beep, synthesizer text-to-speech, dan toggle audio untuk mode bilik hening minimalis.
+
+## [0.1.0] - 2026-11-04
+### Added
+- Inisialisasi awal proyek Next.js dengan Create Next App dan konfigurasi Tailwind CSS.
