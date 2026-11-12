@@ -9,15 +9,11 @@ import { CrestSubang } from './CrestSubang';
 import { extractNikFromQR } from '@/utils/qrHelper';
 import {
   QrCode,
-  Camera,
   CameraOff,
   Printer,
   CheckCircle2,
   AlertCircle,
-  ArrowRight,
   ShieldCheck,
-  UserCheck,
-  RefreshCw,
   Sparkles
 } from 'lucide-react';
 
@@ -114,11 +110,12 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
           setCameraError(null);
           scanFrame();
         }
-      } catch (err: any) {
+      } catch (err) {
         if (!isCancelled) {
           setHasCamera(false);
+          const errorName = err instanceof Error ? err.name : '';
           setCameraError(
-            err.name === 'NotAllowedError'
+            errorName === 'NotAllowedError'
               ? 'Izin kamera ditolak. Silakan izinkan akses kamera atau gunakan input NIK / USB Scanner di bawah.'
               : 'Kamera tidak terdeteksi. Silakan gunakan pemindai USB barcode atau tombol simulasi.'
           );

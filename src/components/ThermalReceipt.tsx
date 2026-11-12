@@ -4,19 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { LastVoteInfo } from '@/context/VoteContext';
 import { CrestSubang } from './CrestSubang';
 import confetti from 'canvas-confetti';
-import { Printer, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Printer, ArrowRight } from 'lucide-react';
 
 interface ThermalReceiptProps {
   lastVote: LastVoteInfo;
   onFinish: () => void;
-  language: 'id' | 'su';
+  language?: 'id' | 'su';
   autoResetSeconds?: number;
 }
 
 export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
   lastVote,
   onFinish,
-  language = 'id',
   autoResetSeconds = 7
 }) => {
   const [countdown, setCountdown] = useState(autoResetSeconds);

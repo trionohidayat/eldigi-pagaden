@@ -7,17 +7,13 @@ import { CANDIDATES } from '@/data/candidates';
 import {
   BarChart3,
   Trophy,
-  Users,
-  CheckCircle2,
   Printer,
   ShieldCheck,
-  TrendingUp,
-  FileText,
-  RotateCcw
+  FileText
 } from 'lucide-react';
 
 export default function RekapitulasiPage() {
-  const { votes, totalVotes, tpsConfig, resetAllData } = useVote();
+  const { votes, totalVotes, tpsConfig } = useVote();
   const [showC1Modal, setShowC1Modal] = useState(false);
 
   // Find leading candidate

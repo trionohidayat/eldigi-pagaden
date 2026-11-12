@@ -72,30 +72,34 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Load from localStorage on mount
   useEffect(() => {
-    try {
-      const savedVotes = localStorage.getItem(STORAGE_KEYS.VOTES);
-      if (savedVotes) {
-        setVotes(JSON.parse(savedVotes));
-      }
+    const timer = setTimeout(() => {
+      try {
+        const savedVotes = localStorage.getItem(STORAGE_KEYS.VOTES);
+        if (savedVotes) {
+          setVotes(JSON.parse(savedVotes));
+        }
 
-      const savedVoters = localStorage.getItem(STORAGE_KEYS.VOTERS);
-      if (savedVoters) {
-        setVoters(JSON.parse(savedVoters));
-      }
+        const savedVoters = localStorage.getItem(STORAGE_KEYS.VOTERS);
+        if (savedVoters) {
+          setVoters(JSON.parse(savedVoters));
+        }
 
-      const savedLang = localStorage.getItem(STORAGE_KEYS.LANG);
-      if (savedLang === 'id' || savedLang === 'su') {
-        setLanguageState(savedLang);
-      }
+        const savedLang = localStorage.getItem(STORAGE_KEYS.LANG);
+        if (savedLang === 'id' || savedLang === 'su') {
+          setLanguageState(savedLang);
+        }
 
-      const savedLastVote = localStorage.getItem(STORAGE_KEYS.LAST_VOTE);
-      if (savedLastVote) {
-        setLastVote(JSON.parse(savedLastVote));
+        const savedLastVote = localStorage.getItem(STORAGE_KEYS.LAST_VOTE);
+        if (savedLastVote) {
+          setLastVote(JSON.parse(savedLastVote));
+        }
+      } catch {
+        // Storage access error handling
       }
-    } catch {
-      // Storage access error handling
-    }
-    setIsHydrated(true);
+      setIsHydrated(true);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Save to localStorage when state changes

@@ -16,7 +16,6 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   candidate,
   onSelect,
   isSelected = false,
-  language = 'id',
   disabled = false
 }) => {
   const handleClick = () => {

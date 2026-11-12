@@ -10,7 +10,6 @@ import {
   BarChart3,
   BookOpen,
   ArrowLeft,
-  ShieldCheck,
   QrCode
 } from 'lucide-react';
 

@@ -5,6 +5,13 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-13
+
+### Fixed
+- **Konflik Peer Dependency Vercel Build (ERESOLVE)**: Memperbarui `@types/node` dari `^20` ke `^22` di `package.json` untuk menyelesaikan konflik *peer dependency* dengan `vitest@^5.1.0` yang mewajibkan `@types/node` `>=22`.
+- **Konfigurasi `.npmrc`**: Menambahkan instruksi `legacy-peer-deps=true` pada `.npmrc` untuk memastikan proses `npm install` pada pipeline CI/CD Vercel selalu berjalan lancar dan toleran terhadap konflik transitif dependensi.
+- **Sanitasi ESLint & Type Safety**: Menghapus tipe `any` pada penanganan exception kamera `QRScannerGate`, membersihkan variabel yang tidak terpakai di seluruh komponen, dan menyelaraskan penanganan hidrasi localStorage di `VoteContext` agar lolos 100% verifikasi ESLint.
+
 ## [0.2.0] - 2026-11-13
 
 ### Added

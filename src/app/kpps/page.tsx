@@ -12,13 +12,11 @@ import {
   ArrowRight,
   ShieldAlert,
   UserCheck,
-  BadgeCheck,
-  Building2,
   Filter
 } from 'lucide-react';
 
 export default function KPPSPage() {
-  const { voters, authorizeVoter, activeVoter, language, tpsConfig } = useVote();
+  const { voters, authorizeVoter, tpsConfig } = useVote();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterDusun, setFilterDusun] = useState('Semua');
   const [successModal, setSuccessModal] = useState<Voter | null>(null);
@@ -43,7 +41,6 @@ export default function KPPSPage() {
   const totalDPT = voters.length;
   const sudahMemilih = voters.filter(v => v.status === 'sudah_memilih').length;
   const sedangDiBilik = voters.filter(v => v.status === 'hadir').length;
-  const belumHadir = voters.filter(v => v.status === 'belum').length;
   const partisipasi = totalDPT > 0 ? Math.round((sudahMemilih / totalDPT) * 100) : 0;
 
   const handleAuthorize = (voter: Voter) => {

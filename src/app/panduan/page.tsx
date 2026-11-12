@@ -6,13 +6,9 @@ import { useVote } from '@/context/VoteContext';
 import {
   BookOpen,
   CheckCircle2,
-  HandMetal,
-  Printer,
-  ShieldCheck,
   HelpCircle,
   ArrowRight,
-  Vote,
-  Sparkles
+  Vote
 } from 'lucide-react';
 
 export default function PanduanPage() {

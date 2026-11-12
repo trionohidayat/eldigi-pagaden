@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useVote } from '@/context/VoteContext';
-import { Voter } from '@/data/dpt';
 import { CrestSubang } from './CrestSubang';
 import { generateQRCodeSVG } from '@/utils/qrHelper';
-import { Printer, ArrowLeft, Search, Filter, QrCode, CheckCircle2 } from 'lucide-react';
+import { Printer, ArrowLeft, Search, QrCode } from 'lucide-react';
 
 interface PrintableQRCardsProps {
   onClose?: () => void;
@@ -14,13 +13,11 @@ interface PrintableQRCardsProps {
 }
 
 export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
-  onClose,
-  isModal = false
+  onClose
 }) => {
   const { voters, tpsConfig } = useVote();
   const [qrSVGs, setQrSVGs] = useState<Record<string, string>>({});
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDusun, setSelectedDusun] = useState('Semua');
 
   // Pre-generate QR Code SVGs for all voters
   useEffect(() => {
@@ -46,11 +43,10 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
   }, [voters]);
 
   const filteredVoters = voters.filter(v => {
-    const matchSearch =
+    return (
       v.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      v.nik.includes(searchQuery);
-    const matchDusun = selectedDusun === 'Semua' || v.dusun === selectedDusun;
-    return matchSearch && matchDusun;
+      v.nik.includes(searchQuery)
+    );
   });
 
   const handlePrint = () => {
