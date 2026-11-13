@@ -30,8 +30,8 @@ export const CANDIDATES: Candidate[] = [
   {
     id: 1,
     number: '01',
-    name: 'Bilal Salsabil Agusti',
-    title: 'S.T.',
+    name: 'Nomor Urut 1',
+    title: '',
     slogan: 'Pagaden Mandiri, Tangguh, & Berkeadilan',
     vision: 'Transformasi infrastruktur desa terpadu, kemandirian pangan petani, dan pemerataan fasilitas publik di seluruh dusun.',
     missions: [
@@ -52,7 +52,7 @@ export const CANDIDATES: Candidate[] = [
     },
     avatarStyle: {
       bgGradient: 'from-amber-500 to-orange-700',
-      initials: 'BA',
+      initials: '01',
       gender: 'male',
       badgeLabel: 'Calon No. 01'
     }
@@ -91,8 +91,8 @@ export const CANDIDATES: Candidate[] = [
   {
     id: 3,
     number: '03',
-    name: 'Dewi Puspita Sari',
-    title: 'S.Pd.',
+    name: 'Nomor Urut 3',
+    title: '',
     slogan: 'Pagaden Sauyunan, Religius, & Sejahtera',
     vision: 'Membangun Pagaden yang guyub rukun, berkarakter mulia, serta unggul dalam kualitas kesehatan balita-lansia dan pendidikan.',
     missions: [
@@ -113,7 +113,7 @@ export const CANDIDATES: Candidate[] = [
     },
     avatarStyle: {
       bgGradient: 'from-emerald-500 to-teal-700',
-      initials: 'DP',
+      initials: '03',
       gender: 'female',
       badgeLabel: 'Calon No. 03'
     }

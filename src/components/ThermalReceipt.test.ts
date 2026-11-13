@@ -40,4 +40,43 @@ describe('ThermalReceipt Component', () => {
     expect(html).toContain('Uly Emarita AD');
     expect(html).toContain('PGD-TPS01-02-X7K9');
   });
+
+  it('harus menampilkan pesan TERIMA KASIH dan konfirmasi Pilihan Anda Tersimpan', () => {
+    const html = renderToStaticMarkup(
+      React.createElement(ThermalReceipt, {
+        lastVote: mockLastVote,
+        onFinish: () => {},
+        language: 'id'
+      })
+    );
+    expect(html).toContain('TERIMA KASIH');
+    expect(html).toContain('Pilihan Anda Tersimpan');
+    expect(html).toContain('Otomatis kembali ke halaman scan QR dalam');
+    expect(html).toContain('5');
+    expect(html).toContain('detik');
+  });
+
+  it('harus menampilkan nama pemilih jika parameter voterName disediakan', () => {
+    const html = renderToStaticMarkup(
+      React.createElement(ThermalReceipt, {
+        lastVote: mockLastVote,
+        voterName: 'Ahmad Subagja',
+        onFinish: () => {},
+        language: 'id'
+      })
+    );
+    expect(html).toContain('Pemilih: Ahmad Subagja');
+  });
+
+  it('harus mendukung bahasa Sunda dengan teks HATUR NUHUN dan Pilihan Anjeun Parantos Kasimpen', () => {
+    const html = renderToStaticMarkup(
+      React.createElement(ThermalReceipt, {
+        lastVote: mockLastVote,
+        onFinish: () => {},
+        language: 'su'
+      })
+    );
+    expect(html).toContain('HATUR NUHUN');
+    expect(html).toContain('Pilihan Anjeun Parantos Kasimpen');
+  });
 });

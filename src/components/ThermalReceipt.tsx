@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { LastVoteInfo } from '@/context/VoteContext';
 import { CrestSubang } from './CrestSubang';
 import confetti from 'canvas-confetti';
-import { Printer, ArrowRight } from 'lucide-react';
+import { Printer, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 interface ThermalReceiptProps {
   lastVote: LastVoteInfo;
+  voterName?: string;
   onFinish: () => void;
   language?: 'id' | 'su';
   autoResetSeconds?: number;
@@ -15,8 +16,10 @@ interface ThermalReceiptProps {
 
 export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
   lastVote,
+  voterName,
   onFinish,
-  autoResetSeconds = 7
+  language = 'id',
+  autoResetSeconds = 5
 }) => {
   const [countdown, setCountdown] = useState(autoResetSeconds);
   const [isPrinted, setIsPrinted] = useState(false);
@@ -27,7 +30,7 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
       confetti({
         particleCount: 50,
         spread: 60,
-        origin: { y: 0.5 }
+        origin: { y: 0.4 }
       });
     } catch {}
 
@@ -63,18 +66,46 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
         background: 'linear-gradient(180deg, #cbe8d6 0%, #e0f2e7 22%, #f5faf7 48%, #ffffff 75%)'
       }}
     >
-      {/* Top Header */}
+      {/* Top Header: Terima Kasih, Pilihan Anda Tersimpan & Crest */}
       <div className="flex flex-col items-center text-center mt-1 sm:mt-2 landscape:mt-0 print:hidden">
         <CrestSubang size={46} className="drop-shadow-xs mb-1.5 sm:scale-115 landscape:scale-80" />
-        <h1 className="text-lg sm:text-2xl md:text-3xl landscape:text-base sm:landscape:text-xl font-extrabold tracking-wider text-black font-sans uppercase">
-          STRUK BUKTI SUARA DIGITAL (VVPAT)
+
+        {/* Animated Checkmark Circle */}
+        <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-emerald-100 border-2 border-emerald-500 text-emerald-600 flex items-center justify-center my-1 shadow-sm">
+          <CheckCircle2 className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+        </div>
+
+        {/* Main Title: TERIMA KASIH */}
+        <h1 className="text-xl sm:text-3xl md:text-4xl landscape:text-lg sm:landscape:text-2xl font-black tracking-wider text-black font-sans uppercase">
+          {language === 'su' ? 'HATUR NUHUN' : 'TERIMA KASIH'}
         </h1>
-        <p className="text-[11px] sm:text-sm font-semibold tracking-widest text-black font-sans uppercase mt-0.5">
-          PEMILIHAN KEPALA DESA PAGADEN • {lastVote.tps}
+
+        {/* Subtitle: Pilihan Anda Tersimpan */}
+        <p className="text-sm sm:text-lg md:text-xl landscape:text-xs sm:landscape:text-base font-extrabold text-emerald-800 font-sans tracking-wide mt-0.5">
+          {language === 'su' ? 'Pilihan Anjeun Parantos Kasimpen' : 'Pilihan Anda Tersimpan'}
         </p>
 
+        {/* Subtitle explanation */}
+        <p className="text-[11px] sm:text-xs text-slate-600 font-medium mt-0.5 max-w-sm">
+          {language === 'su'
+            ? 'Hak sora anjeun parantos hasil kacatet sacara sah, aman, sareng rahasia.'
+            : 'Hak suara Anda telah berhasil tercatat dalam sistem secara sah, aman, dan rahasia.'}
+        </p>
+
+        {/* Voter & TPS info badges */}
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-1.5 text-[11px] sm:text-xs">
+          {voterName && (
+            <span className="font-bold text-slate-900 bg-white/90 border border-slate-300 px-2.5 py-0.5 rounded-full shadow-2xs">
+              Pemilih: {voterName}
+            </span>
+          )}
+          <span className="bg-emerald-50 border border-emerald-300 text-emerald-900 font-semibold px-2.5 py-0.5 rounded-full shadow-2xs">
+            {lastVote.tps}
+          </span>
+        </div>
+
         {/* Printing status pill */}
-        <div className="mt-2 sm:mt-3 inline-flex items-center gap-2 bg-white/90 border border-emerald-400 text-emerald-950 px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
+        <div className="mt-2 inline-flex items-center gap-2 bg-white/90 border border-emerald-400 text-emerald-950 px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
           <span>
             {isPrinted
@@ -82,6 +113,10 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
               : 'Sedang Mencetak Struk Suara (VVPAT)...'}
           </span>
         </div>
+
+        <p className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">
+          STRUK BUKTI SUARA DIGITAL (VVPAT)
+        </p>
       </div>
 
       {/* Minimalist Virtual Thermal Paper Receipt */}
@@ -166,6 +201,14 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
 
       {/* Bottom Action & Countdown Bar */}
       <div className="w-full max-w-xs sm:max-w-sm flex flex-col items-center gap-1.5 sm:gap-2 mb-2 pb-safe print:hidden">
+        {/* Animated Countdown Progress Bar */}
+        <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+          <div
+            className="bg-emerald-600 h-full transition-all duration-1000 ease-linear rounded-full"
+            style={{ width: `${(countdown / (autoResetSeconds || 5)) * 100}%` }}
+          />
+        </div>
+
         <p className="text-xs text-slate-600 text-center">
           Silakan ambil struk kertas, lalu masukkan ke kotak suara fisik.
         </p>
@@ -187,7 +230,7 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
             onClick={onFinish}
             className="flex-1 py-2.5 px-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition cursor-pointer"
           >
-            <span>Selesai</span>
+            <span>Scan QR Baru</span>
             <span className="font-mono bg-red-800/80 px-1.5 py-0.5 rounded text-[10px]">
               {countdown}s
             </span>
@@ -195,8 +238,9 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
           </button>
         </div>
 
-        <div className="text-[11px] text-slate-500 font-medium">
-          Otomatis kembali ke pemindaian QR dalam <span className="font-bold text-black">{countdown}</span> detik
+        <div className="text-[11px] text-slate-600 font-medium text-center">
+          Otomatis kembali ke halaman scan QR dalam{' '}
+          <span className="font-bold text-red-600 font-mono text-xs">{countdown}</span> detik
         </div>
       </div>
     </div>

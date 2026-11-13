@@ -158,7 +158,9 @@ export default function RekapitulasiPage() {
                       <h4 className="text-base sm:text-lg lg:text-xl font-black text-slate-900 leading-tight line-clamp-2">
                         {candidate.name}
                       </h4>
-                      <p className="text-xs text-slate-500 font-semibold truncate">{candidate.title}</p>
+                      {candidate.title ? (
+                        <p className="text-xs text-slate-500 font-semibold truncate">{candidate.title}</p>
+                      ) : null}
                     </div>
                   </div>
 

@@ -5,6 +5,23 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-13
+
+### Added
+- **Layar Konfirmasi Terima Kasih & Penyimpanan Suara (`ThermalReceipt` & `BilikSuaraPage`)**: 
+  - Menampilkan layar ucapan terima kasih resmi berukuran besar ("TERIMA KASIH") dengan pesan konfirmasi "Pilihan Anda Tersimpan" langsung setelah pemilih mengonfirmasi pilihannya di bilik suara.
+  - Ikon lencana verifikasi sukses hijau (`CheckCircle2`), lencana identitas pemilih aktif, serta efek perayaan confetti.
+  - Dukungan dwibahasa penuh: Bahasa Indonesia ("TERIMA KASIH • Pilihan Anda Tersimpan") dan Bahasa Sunda ("HATUR NUHUN • Pilihan Anjeun Parantos Kasimpen").
+- **Hitung Mundur Otomatis 5 Detik & Transisi Kembali ke Pemindai QR**:
+  - Penambahan animasi progress bar dan timer hitung mundur dari 5 detik hingga 0 detik ("Otomatis kembali ke halaman scan QR dalam 5 detik").
+  - Otomatis mereset sesi bilik suara dan kembali ke gerbang pemindaian QR code (`QRScannerGate`) setelah 5 detik, serta tombol manual "Scan QR Baru" untuk melanjutkan tanpa menunggu.
+- **Unit Test Komprehensif**: Penambahan pengujian unit otomatis baru (total 52 tests pada 13 file pengujian, 100% lulus) mencakup pengujian pesan terima kasih, waktu mundur 5 detik, lokalisasi Sunda, pencegahan pemungutan suara ganda (`VoteContext`), dan dialog konfirmasi.
+
+### Fixed
+- **Perbaikan Siklus Hidup Sesi Pemilih (`VoteContext` & `bilik/page.tsx`)**:
+  - Mengoreksi penanganan `activeVoter` pada fungsi `castVote()` agar identitas pemilih tetap terjaga dengan status `sudah_memilih` selama layar terima kasih ditampilkan, sebelum dibersihkan secara bersih oleh `completeActiveVoter()`.
+  - Memprioritaskan render layar struk/terima kasih sebelum evaluasi gerbang QR, mencegah pemotongan atau loncatan tampilan yang terlalu dini ke halaman scan QR.
+
 ## [0.3.1] - 2026-11-13
 
 ### Added

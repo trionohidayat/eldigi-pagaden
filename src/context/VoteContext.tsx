@@ -151,16 +151,19 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem(STORAGE_KEYS.LAST_VOTE, JSON.stringify(newLastVote));
     } catch {}
 
-    // If active voter exists, update status
+    // If active voter exists, update status in DPT list and keep active voter until session completes
     if (activeVoter) {
+      const updatedStatusVoter = {
+        ...activeVoter,
+        status: 'sudah_memilih' as const,
+        votedAt: `${timeStr} WIB`
+      };
+
       setVoters(prev =>
-        prev.map(v =>
-          v.nik === activeVoter.nik
-            ? { ...v, status: 'sudah_memilih', votedAt: `${timeStr} WIB` }
-            : v
-        )
+        prev.map(v => (v.nik === activeVoter.nik ? updatedStatusVoter : v))
       );
-      setActiveVoter(null);
+
+      setActiveVoter(updatedStatusVoter);
     }
 
     return newLastVote;

@@ -25,7 +25,27 @@ export default function BilikSuaraPage() {
   const [receiptData, setReceiptData] = useState<LastVoteInfo | null>(null);
   const [selectionHint, setSelectionHint] = useState(false);
 
-  // If no voter has scanned their QR yet, show the QR Scanner Gate!
+  // After receipt is printed / finished, reset active voter and return automatically to QR Scanner!
+  const handleFinishSession = () => {
+    setReceiptData(null);
+    setSelectedCandidate(null);
+    completeActiveVoter();
+  };
+
+  // Priority 1: When vote has been cast, show Thank You & VVPAT screen for 5 seconds
+  if (receiptData) {
+    return (
+      <ThermalReceipt
+        lastVote={receiptData}
+        voterName={activeVoter?.name}
+        onFinish={handleFinishSession}
+        language={language}
+        autoResetSeconds={5}
+      />
+    );
+  }
+
+  // Priority 2: If no voter has scanned their QR yet, show the QR Scanner Gate!
   if (!activeVoter) {
     return (
       <div className="relative flex-1 min-h-screen flex flex-col justify-between">
@@ -35,8 +55,12 @@ export default function BilikSuaraPage() {
     );
   }
 
-  // Handle touching/clicking a candidate card - selects candidate, does NOT immediately show popup
+  // Handle touching/clicking a candidate card - selects candidate, double tap opens confirmation
   const handleSelectCandidate = (candidate: Candidate) => {
+    if (selectedCandidate?.id === candidate.id) {
+      setIsModalOpen(true);
+      return;
+    }
     setSelectedCandidate(candidate);
     setSelectionHint(false);
   };
@@ -62,18 +86,9 @@ export default function BilikSuaraPage() {
     setIsSubmitting(true);
     const voteResult = castVote(selectedCandidate.id);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsModalOpen(false);
-      setReceiptData(voteResult);
-    }, 400);
-  };
-
-  // After receipt is printed / finished, reset active voter and return automatically to QR Scanner!
-  const handleFinishSession = () => {
-    setReceiptData(null);
-    setSelectedCandidate(null);
-    completeActiveVoter();
+    setIsSubmitting(false);
+    setIsModalOpen(false);
+    setReceiptData(voteResult);
   };
 
   return (
@@ -172,16 +187,6 @@ export default function BilikSuaraPage() {
         language={language}
         isSubmitting={isSubmitting}
       />
-
-      {/* VVPAT Thermal Receipt Simulation */}
-      {receiptData && (
-        <ThermalReceipt
-          lastVote={receiptData}
-          onFinish={handleFinishSession}
-          language={language}
-          autoResetSeconds={8}
-        />
-      )}
     </div>
   );
 }

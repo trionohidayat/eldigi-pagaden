@@ -8,12 +8,12 @@ describe('CANDIDATES Master Data', () => {
     expect(CANDIDATES).toHaveLength(3);
   });
 
-  it('harus memuat Calon No 01 Bilal Salsabil Agusti dengan benar', () => {
+  it('harus memuat Calon No 01 Nomor Urut 1 dengan benar', () => {
     const candidate01 = CANDIDATES.find(c => c.number === '01');
     expect(candidate01).toBeDefined();
     expect(candidate01?.id).toBe(1);
-    expect(candidate01?.name).toBe('Bilal Salsabil Agusti');
-    expect(candidate01?.title).toBe('S.T.');
+    expect(candidate01?.name).toBe('Nomor Urut 1');
+    expect(candidate01?.title).toBe('');
     expect(candidate01?.slogan).toContain('Pagaden Mandiri');
     expect(candidate01?.avatarStyle.badgeLabel).toBe('Calon No. 01');
   });
@@ -38,12 +38,12 @@ describe('CANDIDATES Master Data', () => {
     });
   });
 
-  it('harus memuat Calon No 03 Dewi Puspita Sari dengan benar', () => {
+  it('harus memuat Calon No 03 Nomor Urut 3 dengan benar', () => {
     const candidate03 = CANDIDATES.find(c => c.number === '03');
     expect(candidate03).toBeDefined();
     expect(candidate03?.id).toBe(3);
-    expect(candidate03?.name).toBe('Dewi Puspita Sari');
-    expect(candidate03?.title).toBe('S.Pd.');
+    expect(candidate03?.name).toBe('Nomor Urut 3');
+    expect(candidate03?.title).toBe('');
     expect(candidate03?.slogan).toContain('Pagaden Sauyunan');
     expect(candidate03?.avatarStyle.badgeLabel).toBe('Calon No. 03');
   });
