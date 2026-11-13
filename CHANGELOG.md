@@ -5,6 +5,15 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-13
+
+### Fixed
+- **Dukungan Kamera Belakang untuk Tablet (`QRScannerGate`)**: Mengubah konfigurasi kamera default pemindai QR dari kamera depan (`user`) menjadi kamera belakang (`environment` dengan fallback aman) agar sesuai dengan penggunaan perangkat tablet di bilik suara.
+
+### Added
+- **Kontrol Alih Kamera & Status (`QRScannerGate`)**: Menambahkan indikator status kamera aktif (`Kamera Belakang (Tablet)` / `Kamera Depan (Kios)`), tombol `Ganti Kamera` untuk kemudahan alih kamera secara dinamis, tombol `Coba Hubungkan Kamera` jika akses sempat tertunda, dan unit test pengujian constraint kamera tablet.
+
+
 ## [0.2.1] - 2026-11-13
 
 ### Fixed

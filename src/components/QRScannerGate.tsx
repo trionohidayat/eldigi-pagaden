@@ -9,13 +9,32 @@ import { CrestSubang } from './CrestSubang';
 import { extractNikFromQR } from '@/utils/qrHelper';
 import {
   QrCode,
+  Camera,
   CameraOff,
+  SwitchCamera,
   Printer,
   CheckCircle2,
   AlertCircle,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  RefreshCw
 } from 'lucide-react';
+
+export type CameraFacingMode = 'environment' | 'user';
+
+/**
+ * Returns camera constraints. Defaults to rear camera ('environment')
+ * optimized for tablet usage in polling booths.
+ */
+export function getCameraConstraints(facingMode: CameraFacingMode = 'environment'): MediaStreamConstraints {
+  return {
+    video: {
+      facingMode: { ideal: facingMode },
+      width: { ideal: 640 },
+      height: { ideal: 480 }
+    }
+  };
+}
 
 interface QRScannerGateProps {
   onAuthorized: (voter: Voter) => void;
@@ -27,6 +46,9 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Default to rear camera ('environment') for tablet usage
+  const [facingMode, setFacingMode] = useState<CameraFacingMode>('environment');
+  const [retryCount, setRetryCount] = useState(0);
   const [hasCamera, setHasCamera] = useState<boolean | null>(null);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [manualCode, setManualCode] = useState('');
@@ -82,20 +104,27 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
     let isCancelled = false;
 
     async function startCamera() {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      if (typeof navigator === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setHasCamera(false);
         setCameraError('Peramban ini tidak mendukung akses kamera langsung.');
         return;
       }
 
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'user',
-            width: { ideal: 640 },
-            height: { ideal: 480 }
-          }
-        });
+        const constraints = getCameraConstraints(facingMode);
+
+        try {
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (constraintErr) {
+          console.warn('Constraint facingMode gagal, beralih ke kamera default:', constraintErr);
+          // Fallback tanpa constraint facingMode jika perangkat/browser tidak mendukungnya
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 }
+            }
+          });
+        }
 
         if (isCancelled) {
           stream.getTracks().forEach(t => t.stop());
@@ -116,8 +145,8 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
           const errorName = err instanceof Error ? err.name : '';
           setCameraError(
             errorName === 'NotAllowedError'
-              ? 'Izin kamera ditolak. Silakan izinkan akses kamera atau gunakan input NIK / USB Scanner di bawah.'
-              : 'Kamera tidak terdeteksi. Silakan gunakan pemindai USB barcode atau tombol simulasi.'
+              ? 'Izin kamera ditolak. Silakan izinkan akses kamera di pengaturan browser tablet atau gunakan input NIK / USB Scanner di bawah.'
+              : 'Kamera tidak terdeteksi atau sedang digunakan aplikasi lain. Silakan gunakan pemindai USB barcode atau tombol simulasi.'
           );
         }
       }
@@ -165,7 +194,17 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
         stream.getTracks().forEach(t => t.stop());
       }
     };
-  }, [verifyAndAuthorize, isProcessing]);
+  }, [verifyAndAuthorize, isProcessing, facingMode, retryCount]);
+
+  const toggleFacingMode = () => {
+    setFacingMode(prev => (prev === 'environment' ? 'user' : 'environment'));
+  };
+
+  const handleRetryCamera = () => {
+    setHasCamera(null);
+    setCameraError(null);
+    setRetryCount(c => c + 1);
+  };
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -229,39 +268,70 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
             </span>
           </div>
         ) : (
-          /* Live Camera Viewfinder Box */
-          <div className="my-5 relative w-64 h-64 sm:w-72 sm:h-72 border-2 border-black rounded-2xl overflow-hidden bg-black flex items-center justify-center shadow-inner">
-            <video
-              ref={videoRef}
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            />
+          <>
+            {/* Tablet Camera Mode & Switch Button */}
+            <div className="mt-3 w-64 sm:w-72 flex items-center justify-between gap-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 text-[11px] font-bold">
+                <Camera className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
+                <span>
+                  {facingMode === 'environment' ? 'Kamera Belakang (Tablet)' : 'Kamera Depan (Kios)'}
+                </span>
+              </div>
 
-            {/* Target Alignment Corners */}
-            <div className="absolute inset-4 pointer-events-none">
-              <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-emerald-400 rounded-tl-md" />
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-emerald-400 rounded-tr-md" />
-              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-emerald-400 rounded-bl-md" />
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-emerald-400 rounded-br-md" />
-
-              {/* Scanning Red/Emerald Laser Line */}
-              <div className="w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_#34d399] absolute top-1/2 -translate-y-1/2 animate-pulse" />
+              <button
+                type="button"
+                onClick={toggleFacingMode}
+                disabled={isProcessing}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 text-[11px] font-bold border border-slate-300 transition cursor-pointer disabled:opacity-50"
+                title="Ganti ke kamera depan / belakang tablet"
+              >
+                <SwitchCamera className="w-3.5 h-3.5 text-slate-700" />
+                <span>Ganti Kamera</span>
+              </button>
             </div>
 
-            {/* Fallback if camera not working */}
-            {hasCamera === false && (
-              <div className="absolute inset-0 bg-slate-900/90 text-white p-4 flex flex-col items-center justify-center text-center">
-                <CameraOff className="w-10 h-10 text-rose-400 mb-2" />
-                <span className="text-xs font-bold text-slate-200">
-                  Kamera Tidak Aktif
-                </span>
-                <p className="text-[10px] text-slate-400 mt-1 max-w-[200px]">
-                  {cameraError || 'Gunakan input manual atau simulasi cepat di bawah.'}
-                </p>
+            {/* Live Camera Viewfinder Box */}
+            <div className="my-3 sm:my-4 relative w-64 h-64 sm:w-72 sm:h-72 border-2 border-black rounded-2xl overflow-hidden bg-black flex items-center justify-center shadow-inner">
+              <video
+                ref={videoRef}
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+
+              {/* Target Alignment Corners */}
+              <div className="absolute inset-4 pointer-events-none">
+                <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-emerald-400 rounded-tl-md" />
+                <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-emerald-400 rounded-tr-md" />
+                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-emerald-400 rounded-bl-md" />
+                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-emerald-400 rounded-br-md" />
+
+                {/* Scanning Red/Emerald Laser Line */}
+                <div className="w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_#34d399] absolute top-1/2 -translate-y-1/2 animate-pulse" />
               </div>
-            )}
-          </div>
+
+              {/* Fallback if camera not working */}
+              {hasCamera === false && (
+                <div className="absolute inset-0 bg-slate-900/90 text-white p-4 flex flex-col items-center justify-center text-center">
+                  <CameraOff className="w-10 h-10 text-rose-400 mb-2" />
+                  <span className="text-xs font-bold text-slate-200">
+                    Kamera Tidak Aktif
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-1 max-w-[200px]">
+                    {cameraError || 'Gunakan input manual atau simulasi cepat di bawah.'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleRetryCamera}
+                    className="mt-3 px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold rounded-lg transition inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    <span>Coba Hubungkan Kamera</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         {/* Error Alert Banner */}
