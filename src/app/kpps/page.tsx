@@ -60,24 +60,24 @@ export default function KPPSPage() {
   };
 
   return (
-    <div className="flex-1 bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="flex-1 bg-slate-50 py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-lg shadow-sky-600/30 flex-shrink-0">
-              <Users className="w-8 h-8" />
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-lg shadow-sky-600/30 flex-shrink-0">
+              <Users className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="bg-sky-100 text-sky-800 text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className="bg-sky-100 text-sky-800 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full">
                   Meja Pendaftaran
                 </span>
-                <span className="text-xs font-bold text-slate-500 uppercase">
+                <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">
                   {tpsConfig.tpsNumber} • {tpsConfig.desa}
                 </span>
               </div>
-              <h1 className="text-2xl font-black text-slate-900 mt-0.5">
+              <h1 className="text-lg sm:text-2xl font-black text-slate-900 mt-0.5">
                 Verifikasi DPT &amp; Registrasi Pemilih
               </h1>
             </div>
@@ -85,7 +85,7 @@ export default function KPPSPage() {
 
           <Link
             href="/bilik"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-600/20 transition active:scale-95"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-600/20 transition active:scale-95"
           >
             <span>Buka Layar Bilik Suara</span>
             <ArrowRight className="w-4 h-4" />
@@ -93,35 +93,35 @@ export default function KPPSPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
-            <span className="text-xs font-semibold text-slate-500">Total DPT Simulasi</span>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">{totalDPT}</div>
-            <span className="text-[11px] text-slate-400">Pemilih Terdaftar</span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-sm">
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-500">Total DPT Simulasi</span>
+            <div className="text-xl sm:text-3xl font-black text-slate-900 mt-0.5 sm:mt-1">{totalDPT}</div>
+            <span className="text-[10px] sm:text-[11px] text-slate-400">Pemilih Terdaftar</span>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
-            <span className="text-xs font-semibold text-emerald-600">Sudah Memilih</span>
-            <div className="text-2xl sm:text-3xl font-black text-emerald-700 mt-1">{sudahMemilih}</div>
-            <span className="text-[11px] text-emerald-600 font-medium">Suara Masuk Sah</span>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-sm">
+            <span className="text-[11px] sm:text-xs font-semibold text-emerald-600">Sudah Memilih</span>
+            <div className="text-xl sm:text-3xl font-black text-emerald-700 mt-0.5 sm:mt-1">{sudahMemilih}</div>
+            <span className="text-[10px] sm:text-[11px] text-emerald-600 font-medium">Suara Masuk Sah</span>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
-            <span className="text-xs font-semibold text-sky-600">Sedang Di Bilik</span>
-            <div className="text-2xl sm:text-3xl font-black text-sky-700 mt-1">{sedangDiBilik}</div>
-            <span className="text-[11px] text-sky-600 font-medium">Membawa Token</span>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-sm">
+            <span className="text-[11px] sm:text-xs font-semibold text-sky-600">Sedang Di Bilik</span>
+            <div className="text-xl sm:text-3xl font-black text-sky-700 mt-0.5 sm:mt-1">{sedangDiBilik}</div>
+            <span className="text-[10px] sm:text-[11px] text-sky-600 font-medium">Membawa Token</span>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
-            <span className="text-xs font-semibold text-slate-500">Tingkat Partisipasi</span>
-            <div className="text-2xl sm:text-3xl font-black text-indigo-700 mt-1">{partisipasi}%</div>
-            <span className="text-[11px] text-slate-400">Kehadiran Warga</span>
+          <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-sm">
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-500">Tingkat Partisipasi</span>
+            <div className="text-xl sm:text-3xl font-black text-indigo-700 mt-0.5 sm:mt-1">{partisipasi}%</div>
+            <span className="text-[10px] sm:text-[11px] text-slate-400">Kehadiran Warga</span>
           </div>
         </div>
 
         {/* Notice on Double Voting Error */}
         {errorNotice && (
-          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3 animate-in fade-in">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3 animate-in fade-in">
             <ShieldAlert className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <span className="font-bold">Peringatan Integritas Suara: </span>
@@ -137,28 +137,28 @@ export default function KPPSPage() {
         )}
 
         {/* Filter and Search Bar */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
             {/* Search Input */}
-            <div className="relative w-full sm:w-96">
+            <div className="relative w-full sm:w-80 md:w-96">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Cari Nama warga atau NIK..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full pl-10 pr-4 py-2 sm:py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
             </div>
 
             {/* Filter by Dusun */}
-            <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-              <Filter className="w-4 h-4 text-slate-400 hidden sm:block" />
+            <div className="flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+              <Filter className="w-4 h-4 text-slate-400 hidden sm:block flex-shrink-0" />
               {dusunList.map(dusun => (
                 <button
                   key={dusun}
                   onClick={() => setFilterDusun(dusun)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex-shrink-0 ${
                     filterDusun === dusun
                       ? 'bg-sky-600 text-white shadow-sm'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -173,22 +173,22 @@ export default function KPPSPage() {
           {/* DPT Table */}
           <div className="overflow-x-auto rounded-2xl border border-slate-100">
             <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+              <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200 whitespace-nowrap">
                 <tr>
-                  <th className="py-3 px-4">Nama Lengkap</th>
-                  <th className="py-3 px-4">NIK (Simulasi)</th>
-                  <th className="py-3 px-4">Wilayah Dusun</th>
-                  <th className="py-3 px-4">RT/RW</th>
-                  <th className="py-3 px-4">Status Hak Suara</th>
-                  <th className="py-3 px-4 text-center">Aksi Petugas</th>
+                  <th className="py-3 px-3 sm:px-4">Nama Lengkap</th>
+                  <th className="py-3 px-3 sm:px-4">NIK (Simulasi)</th>
+                  <th className="py-3 px-3 sm:px-4">Wilayah Dusun</th>
+                  <th className="py-3 px-3 sm:px-4">RT/RW</th>
+                  <th className="py-3 px-3 sm:px-4">Status Hak Suara</th>
+                  <th className="py-3 px-3 sm:px-4 text-center">Aksi Petugas</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 whitespace-nowrap">
                 {filteredVoters.map((voter, idx) => (
                   <tr key={voter.nik} className="hover:bg-slate-50/80 transition">
-                    <td className="py-3.5 px-4 font-semibold text-slate-900">
+                    <td className="py-3.5 px-3 sm:px-4 font-semibold text-slate-900">
                       <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold">
+                        <span className="w-7 h-7 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
                           {idx + 1}
                         </span>
                         <div>
@@ -199,16 +199,16 @@ export default function KPPSPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-slate-600">
+                    <td className="py-3.5 px-3 sm:px-4 font-mono text-slate-600">
                       {voter.nik.slice(0, 6)}******{voter.nik.slice(-4)}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-700 font-medium">
+                    <td className="py-3.5 px-3 sm:px-4 text-slate-700 font-medium">
                       {voter.dusun}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600">
+                    <td className="py-3.5 px-3 sm:px-4 text-slate-600">
                       RT {voter.rt} / RW {voter.rw}
                     </td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-3 sm:px-4">
                       {voter.status === 'sudah_memilih' ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -225,7 +225,7 @@ export default function KPPSPage() {
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-center">
+                    <td className="py-3.5 px-3 sm:px-4 text-center">
                       {voter.status === 'sudah_memilih' ? (
                         <span className="text-[11px] text-slate-400 italic font-mono">
                           {voter.votedAt}
@@ -234,7 +234,7 @@ export default function KPPSPage() {
                         <button
                           type="button"
                           onClick={() => handleAuthorize(voter)}
-                          className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-sm shadow-sky-600/30 transition active:scale-95"
+                          className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-sm shadow-sky-600/30 transition active:scale-95 cursor-pointer"
                         >
                           Panggil ke Bilik
                         </button>
@@ -250,8 +250,8 @@ export default function KPPSPage() {
 
       {/* Modal Sukses Otorisasi */}
       {successModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 text-center shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200">
             <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center mb-4">
               <UserCheck className="w-8 h-8" />
             </div>

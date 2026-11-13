@@ -216,7 +216,7 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
 
   return (
     <div
-      className="relative flex-1 min-h-screen flex flex-col justify-between items-center py-6 px-4 select-none overflow-x-hidden"
+      className="relative flex-1 min-h-screen flex flex-col justify-between items-center py-4 sm:py-6 px-3 sm:px-4 select-none overflow-x-hidden overflow-y-auto"
       style={{
         background: 'linear-gradient(180deg, #cbe8d6 0%, #e0f2e7 22%, #f5faf7 48%, #ffffff 75%)'
       }}
@@ -225,25 +225,25 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
       <canvas ref={canvasRef} className="hidden" />
 
       {/* Header */}
-      <div className="flex flex-col items-center text-center mt-2">
-        <CrestSubang size={56} className="drop-shadow-xs mb-2" />
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider text-black font-sans uppercase">
+      <div className="flex flex-col items-center text-center mt-1 sm:mt-2 landscape:mt-0">
+        <CrestSubang size={48} className="drop-shadow-xs mb-1.5 sm:scale-115 landscape:scale-80" />
+        <h1 className="text-xl sm:text-3xl md:text-4xl landscape:text-lg sm:landscape:text-2xl font-extrabold tracking-wider text-black font-sans uppercase">
           SURAT SUARA DIGITAL
         </h1>
-        <p className="text-xs sm:text-sm md:text-base font-semibold tracking-widest text-black font-sans uppercase mt-1">
+        <p className="text-[11px] sm:text-sm md:text-base landscape:text-[10px] sm:landscape:text-xs font-semibold tracking-widest text-black font-sans uppercase mt-0.5 sm:mt-1">
           PEMILIHAN KEPALA DESA PAGADEN • {tpsConfig.tpsNumber}
         </p>
       </div>
 
       {/* Main Scanner Box */}
-      <div className="my-auto w-full max-w-lg bg-white border-2 border-black rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col items-center text-center relative animate-in fade-in zoom-in-95 duration-200">
+      <div className="my-auto w-full max-w-lg bg-white border-2 border-black rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl flex flex-col items-center text-center relative animate-in fade-in zoom-in-95 duration-200">
         {/* Instruction Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-bold mb-4">
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] sm:text-xs md:text-sm font-bold mb-3 sm:mb-4">
           <QrCode className="w-4 h-4 text-emerald-700" />
           <span>Langkah 1: Pindai Kartu Suara Pemilih</span>
         </div>
 
-        <h2 className="text-lg sm:text-xl font-black text-black">
+        <h2 className="text-base sm:text-xl font-black text-black">
           Arahkan QR Code ke Kamera
         </h2>
         <p className="text-xs text-slate-500 mt-1 max-w-xs">
@@ -252,15 +252,15 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
 
         {/* Success Splash Message */}
         {successVoter ? (
-          <div className="my-6 w-full p-6 bg-emerald-50 border-2 border-emerald-500 rounded-2xl flex flex-col items-center justify-center gap-2 animate-in zoom-in-95">
-            <CheckCircle2 className="w-12 h-12 text-emerald-600 animate-bounce" />
-            <h3 className="text-lg font-black text-emerald-900">
+          <div className="my-4 sm:my-6 w-full p-4 sm:p-6 bg-emerald-50 border-2 border-emerald-500 rounded-2xl flex flex-col items-center justify-center gap-2 animate-in zoom-in-95">
+            <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12 text-emerald-600 animate-bounce" />
+            <h3 className="text-base sm:text-lg font-black text-emerald-900">
               QR Code Terverifikasi!
             </h3>
-            <p className="text-sm font-bold text-emerald-800">
+            <p className="text-xs sm:text-sm font-bold text-emerald-800">
               {successVoter.name}
             </p>
-            <p className="text-xs text-emerald-600 font-mono">
+            <p className="text-[11px] sm:text-xs text-emerald-600 font-mono">
               NIK: {successVoter.nik} • {successVoter.dusun}
             </p>
             <span className="text-xs font-semibold text-emerald-700 mt-2">
@@ -270,8 +270,8 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
         ) : (
           <>
             {/* Tablet Camera Mode & Switch Button */}
-            <div className="mt-3 w-64 sm:w-72 flex items-center justify-between gap-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 text-[11px] font-bold">
+            <div className="mt-2.5 sm:mt-3 w-full max-w-[280px] sm:max-w-xs flex items-center justify-between gap-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 text-[10px] sm:text-[11px] font-bold">
                 <Camera className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
                 <span>
                   {facingMode === 'environment' ? 'Kamera Belakang (Tablet)' : 'Kamera Depan (Kios)'}
@@ -282,7 +282,7 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
                 type="button"
                 onClick={toggleFacingMode}
                 disabled={isProcessing}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 text-[11px] font-bold border border-slate-300 transition cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 text-[10px] sm:text-[11px] font-bold border border-slate-300 transition cursor-pointer disabled:opacity-50"
                 title="Ganti ke kamera depan / belakang tablet"
               >
                 <SwitchCamera className="w-3.5 h-3.5 text-slate-700" />
@@ -291,7 +291,7 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
             </div>
 
             {/* Live Camera Viewfinder Box */}
-            <div className="my-3 sm:my-4 relative w-64 h-64 sm:w-72 sm:h-72 border-2 border-black rounded-2xl overflow-hidden bg-black flex items-center justify-center shadow-inner">
+            <div className="my-2.5 sm:my-4 relative w-56 h-56 sm:w-68 sm:h-68 md:w-72 md:h-72 landscape:w-48 landscape:h-48 border-2 border-black rounded-2xl overflow-hidden bg-black flex items-center justify-center shadow-inner">
               <video
                 ref={videoRef}
                 muted
@@ -313,7 +313,7 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
               {/* Fallback if camera not working */}
               {hasCamera === false && (
                 <div className="absolute inset-0 bg-slate-900/90 text-white p-4 flex flex-col items-center justify-center text-center">
-                  <CameraOff className="w-10 h-10 text-rose-400 mb-2" />
+                  <CameraOff className="w-8 h-8 sm:w-10 sm:h-10 text-rose-400 mb-2" />
                   <span className="text-xs font-bold text-slate-200">
                     Kamera Tidak Aktif
                   </span>
@@ -336,55 +336,55 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
 
         {/* Error Alert Banner */}
         {errorMessage && (
-          <div className="w-full mb-4 p-3 bg-rose-50 border border-rose-300 rounded-xl flex items-center gap-2 text-rose-900 text-xs font-semibold animate-in fade-in">
+          <div className="w-full mb-3 sm:mb-4 p-2.5 sm:p-3 bg-rose-50 border border-rose-300 rounded-xl flex items-center gap-2 text-rose-900 text-xs font-semibold animate-in fade-in">
             <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
             <span className="text-left">{errorMessage}</span>
           </div>
         )}
 
         {/* USB Barcode / Manual NIK Input Form */}
-        <form onSubmit={handleManualSubmit} className="w-full mt-1 flex gap-2">
+        <form onSubmit={handleManualSubmit} className="w-full mt-1 flex flex-col xs:flex-row gap-2">
           <input
             type="text"
             value={manualCode}
             onChange={e => setManualCode(e.target.value)}
             placeholder="Scan dengan USB scanner / ketik NIK..."
-            className="flex-1 px-3.5 py-2.5 text-xs sm:text-sm border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+            className="flex-1 px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
             autoFocus
           />
           <button
             type="submit"
-            className="px-4 py-2.5 bg-black hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl transition cursor-pointer"
+            className="px-4 py-2 sm:py-2.5 bg-black hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl transition cursor-pointer"
           >
             Verifikasi
           </button>
         </form>
 
         {/* Quick Simulator Buttons for Demo */}
-        <div className="w-full mt-5 pt-4 border-t border-slate-100 text-left">
+        <div className="w-full mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-slate-100 text-left">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Simulasi Cepat (Pilih Warga DPT):
+            <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
+              <span>Simulasi Cepat (Pilih Warga DPT):</span>
             </span>
             <Link
               href="/cetak-qr"
               target="_blank"
-              className="text-[11px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1"
+              className="text-[10px] sm:text-[11px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 flex-shrink-0"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Cetak Kartu QR</span>
             </Link>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
+          <div className="flex flex-wrap gap-1.5 max-h-24 sm:max-h-28 overflow-y-auto pr-1">
             {voters.slice(0, 6).map(v => (
               <button
                 key={v.nik}
                 type="button"
                 onClick={() => verifyAndAuthorize(v.nik)}
                 disabled={v.status === 'sudah_memilih' || isProcessing}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold border transition flex items-center gap-1 cursor-pointer ${
                   v.status === 'sudah_memilih'
                     ? 'bg-slate-100 text-slate-400 border-slate-200 line-through cursor-not-allowed'
                     : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-300'
@@ -399,8 +399,8 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
       </div>
 
       {/* Footer Info */}
-      <div className="text-center text-xs text-slate-500 flex items-center gap-2 mt-4">
-        <ShieldCheck className="w-4 h-4 text-emerald-700" />
+      <div className="text-center text-[10px] sm:text-xs text-slate-500 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+        <ShieldCheck className="w-4 h-4 text-emerald-700 flex-shrink-0" />
         <span>Pilkades Digital Desa Pagaden • Verifikasi Surat Suara Berbasis QR Code</span>
       </div>
     </div>

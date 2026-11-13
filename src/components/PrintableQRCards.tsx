@@ -56,39 +56,39 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
   return (
     <div className="w-full min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Non-print Top Controls Bar */}
-      <div className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 sm:px-8 py-4 shadow-xs print:hidden">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+      <div className="sticky top-0 z-30 bg-white border-b border-slate-200 px-3 sm:px-8 py-3 sm:py-4 shadow-xs print:hidden">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3">
             {onClose ? (
               <button
                 type="button"
                 onClick={onClose}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
                 title="Kembali"
               >
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             ) : (
               <Link
                 href="/bilik"
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
                 title="Kembali ke Bilik Suara"
               >
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
             )}
             <div>
-              <h1 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-emerald-600" />
-                <span>Kartu Pemilih &amp; QR Code Suara (DPT)</span>
+              <h1 className="text-base sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <QrCode className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
+                <span>Kartu Pemilih &amp; QR Code Suara</span>
               </h1>
-              <p className="text-xs text-slate-500 font-mono">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-mono">
                 {tpsConfig.tpsNumber} • {tpsConfig.desa}, Kec. {tpsConfig.kecamatan}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-col xs:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
             {/* Search filter */}
             <div className="relative flex-1 sm:w-64">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -105,7 +105,7 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all cursor-pointer whitespace-nowrap"
+              className="w-full xs:w-auto justify-center px-4 sm:px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all cursor-pointer whitespace-nowrap"
             >
               <Printer className="w-4 h-4" />
               <span>Cetak Kartu ({filteredVoters.length})</span>

@@ -5,7 +5,21 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
-## [0.2.2] - 2026-11-13
+## [0.3.0] - 2026-11-13
+
+### Added
+- **Desain Responsif Multi-Device Penuh**: Optimasi menyeluruh agar antarmuka tampil sempurna di Komputer/PC, Laptop, Tablet, dan Ponsel (Smartphone), baik dalam orientasi **Portrait** maupun **Landscape**.
+- **Navigasi Mobile Responsif (`Navbar`)**: Penambahan bilah geser cepat horizontal (*quick tab scroll*) serta menu drawer mobile (*hamburger menu*) dengan indikator suara masuk dan penyesuaian label otomatis pada layar kecil.
+- **Konfigurasi Viewport Standar Next.js (`layout.tsx`)**: Integrasi ekspor `viewport: Viewport` dengan `viewportFit: cover`, `width: device-width`, dan safe area padding (`pb-safe`, `pt-safe`) untuk perangkat ber-notch/home indicator.
+- **Unit Test Komponen Navbar (`Navbar.test.ts`)**: 3 pengujian unit baru yang memverifikasi isolasi bilik suara (mode hening tanpa navbar) dan fungsionalitas navigasi responsif pada Meja KPPS dan Rekapitulasi.
+
+### Changed
+- **Adaptasi Orientasi Layar Bilik Suara (`BilikSuaraPage`)**: 
+  - Mode Landscape (Tablet / HP / Laptop): 3 kartu calon otomatis berjejer rapi dalam 1 baris (*side-by-side*) dengan ukuran foto proporsional sehingga seluruh surat suara dan tombol konfirmasi muat dalam satu layar tanpa perlu scroll berlebihan.
+  - Mode Portrait HP: Kartu calon tersusun vertikal yang ramah sentuhan (*touch-friendly*) dengan tombol merah `PILIH KANDIDAT INI` yang selalu menempel di dasar layar (*sticky bottom bar*).
+- **Responsivitas Pemindai QR (`QRScannerGate`)**: Viewfinder kamera dinamis yang menyesuaikan layar kecil (`320px` hingga layar landscape pendek), form input barcode USB yang otomatis menyesuaikan ruang, dan tata letak simulasi pemilih yang fleksibel.
+- **Dialog Modal & Cetak Struk Responsif (`ConfirmationModal` & `ThermalReceipt`)**: Batasan tinggi maksimum adaptif (`max-h-[92vh] overflow-y-auto`) dengan padding ringkas pada mode landscape agar tombol aksi tidak pernah terpotong.
+- **Penyelarasan Meja KPPS, Rekapitulasi & Cetak QR (`/kpps`, `/rekapitulasi`, `/cetak-qr`)**: Grid statistik adaptif (2 kolom di HP, 4 kolom di layar lebar), tabel DPT anti-patah kata (`whitespace-nowrap`), dan kartu rekapitulasi yang tetap nyaman dibaca di tablet portrait.
 
 ### Fixed
 - **Dukungan Kamera Belakang untuk Tablet (`QRScannerGate`)**: Mengubah konfigurasi kamera default pemindai QR dari kamera depan (`user`) menjadi kamera belakang (`environment` dengan fallback aman) agar sesuai dengan penggunaan perangkat tablet di bilik suara.

@@ -87,43 +87,43 @@ export default function BilikSuaraPage() {
       <KioskDrawer />
 
       {/* Main Ballot Content Area */}
-      <div className="flex-1 flex flex-col justify-between items-center py-5 sm:py-7 px-4 w-full">
+      <div className="flex-1 flex flex-col justify-between items-center py-3 sm:py-7 landscape:py-2 px-3 sm:px-4 w-full">
         {/* Top Header: Crest + Surat Suara + Pemilihan Kepala Desa */}
-        <div className="flex flex-col items-center text-center mt-1 sm:mt-2">
+        <div className="flex flex-col items-center text-center mt-1 sm:mt-2 landscape:mt-0">
           {/* Official Emblem of Kabupaten Subang */}
-          <div className="mb-2 sm:mb-3">
-            <CrestSubang size={56} className="drop-shadow-xs" />
+          <div className="mb-1.5 sm:mb-3 landscape:mb-1">
+            <CrestSubang size={46} className="drop-shadow-xs sm:scale-120 landscape:scale-85" />
           </div>
 
           {/* Heading 1: SURAT SUARA */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider text-black font-sans uppercase">
+          <h1 className="text-xl sm:text-3xl md:text-4xl landscape:text-lg sm:landscape:text-2xl font-extrabold tracking-wider text-black font-sans uppercase">
             SURAT SUARA
           </h1>
 
           {/* Heading 2: PEMILIHAN KEPALA DESA */}
-          <p className="text-xs sm:text-sm md:text-base font-semibold tracking-widest text-black font-sans uppercase mt-1">
+          <p className="text-[11px] sm:text-sm md:text-base landscape:text-[10px] sm:landscape:text-xs font-semibold tracking-widest text-black font-sans uppercase mt-0.5 sm:mt-1">
             PEMILIHAN KEPALA DESA
           </p>
 
           {/* Verified Voter Status Pill */}
-          <div className="mt-2.5 inline-flex items-center gap-2 bg-white/80 border border-emerald-300 text-emerald-950 px-3.5 py-1 rounded-full text-xs font-semibold shadow-xs">
+          <div className="mt-2 sm:mt-2.5 max-w-[95vw] inline-flex items-center gap-1.5 sm:gap-2 bg-white/90 border border-emerald-300 text-emerald-950 px-3 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold shadow-xs">
             <UserCheck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-            <span className="font-bold">{activeVoter.name}</span>
+            <span className="font-bold truncate max-w-[130px] sm:max-w-none">{activeVoter.name}</span>
             <span className="text-slate-300">•</span>
-            <span className="font-mono text-[11px] text-slate-600">NIK: {activeVoter.nik}</span>
+            <span className="font-mono text-[10px] sm:text-[11px] text-slate-600 flex-shrink-0">NIK: {activeVoter.nik}</span>
             <button
               type="button"
               onClick={completeActiveVoter}
               title="Batal / Kembali ke Layar Scan QR"
-              className="ml-1 p-0.5 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-700"
+              className="ml-1 p-0.5 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex-shrink-0"
             >
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Candidate Ballot Cards Row */}
-        <div className="my-auto py-4 sm:py-6 w-full max-w-5xl flex flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8 px-2">
+        {/* Candidate Ballot Cards Row - Adaptive: side-by-side on desktop/tablet/landscape, clean stack on mobile portrait */}
+        <div className="my-auto py-3 sm:py-6 landscape:py-1.5 w-full max-w-5xl flex flex-col sm:flex-row landscape:flex-row justify-center items-center gap-3 sm:gap-6 md:gap-8 px-2">
           {CANDIDATES.map(candidate => (
             <CandidateCard
               key={candidate.id}
@@ -146,13 +146,13 @@ export default function BilikSuaraPage() {
         </div>
       </div>
 
-      {/* Bottom Bar: Full-Width Red Bar with White Text "PILIH KANDIDAT INI" */}
-      <div className="w-full">
+      {/* Bottom Bar: Sticky Full-Width Red Bar with White Text "PILIH KANDIDAT INI" */}
+      <div className="sticky bottom-0 z-20 w-full pb-safe bg-white/90 backdrop-blur-xs shadow-lg">
         <button
           type="button"
           onClick={handleBottomBarClick}
           disabled={Boolean(receiptData)}
-          className={`w-full h-14 sm:h-16 text-white font-bold text-base sm:text-lg tracking-wider font-sans uppercase flex items-center justify-center transition-colors duration-150 cursor-pointer shadow-md ${
+          className={`w-full h-12 sm:h-16 landscape:h-11 text-white font-bold text-sm sm:text-lg landscape:text-xs sm:landscape:text-base tracking-wider font-sans uppercase flex items-center justify-center transition-colors duration-150 cursor-pointer shadow-md ${
             selectedCandidate
               ? 'bg-[#ef4444] hover:bg-[#dc2626] active:bg-[#b91c1c]'
               : 'bg-[#ef4444] hover:bg-[#dc2626] active:bg-[#b91c1c] opacity-90'

@@ -65,7 +65,7 @@ export const KioskDrawer: React.FC = () => {
       {/* Slide-over Drawer for KPPS & Panitia */}
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex justify-end animate-in fade-in duration-150">
-          <div className="w-80 sm:w-96 bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
+          <div className="w-full max-w-xs sm:max-w-sm bg-white h-full shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
             <div>
               {/* Drawer Header */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-200">
@@ -202,8 +202,8 @@ export const KioskDrawer: React.FC = () => {
 
       {/* PIN Reset Modal */}
       {showResetModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl border border-slate-200">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-2 text-rose-600">
                 <RotateCcw className="w-5 h-5" />

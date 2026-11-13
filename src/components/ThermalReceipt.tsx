@@ -58,23 +58,23 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col justify-between items-center py-6 px-4 select-none overflow-y-auto"
+      className="fixed inset-0 z-50 flex flex-col justify-between items-center py-3 sm:py-6 px-3 sm:px-4 select-none overflow-y-auto"
       style={{
         background: 'linear-gradient(180deg, #cbe8d6 0%, #e0f2e7 22%, #f5faf7 48%, #ffffff 75%)'
       }}
     >
       {/* Top Header */}
-      <div className="flex flex-col items-center text-center mt-2 print:hidden">
-        <CrestSubang size={52} className="drop-shadow-xs mb-2" />
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-wider text-black font-sans uppercase">
+      <div className="flex flex-col items-center text-center mt-1 sm:mt-2 landscape:mt-0 print:hidden">
+        <CrestSubang size={46} className="drop-shadow-xs mb-1.5 sm:scale-115 landscape:scale-80" />
+        <h1 className="text-lg sm:text-2xl md:text-3xl landscape:text-base sm:landscape:text-xl font-extrabold tracking-wider text-black font-sans uppercase">
           STRUK BUKTI SUARA DIGITAL (VVPAT)
         </h1>
-        <p className="text-xs sm:text-sm font-semibold tracking-widest text-black font-sans uppercase mt-0.5">
+        <p className="text-[11px] sm:text-sm font-semibold tracking-widest text-black font-sans uppercase mt-0.5">
           PEMILIHAN KEPALA DESA PAGADEN • {lastVote.tps}
         </p>
 
         {/* Printing status pill */}
-        <div className="mt-3 inline-flex items-center gap-2 bg-white/90 border border-emerald-400 text-emerald-950 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs">
+        <div className="mt-2 sm:mt-3 inline-flex items-center gap-2 bg-white/90 border border-emerald-400 text-emerald-950 px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
           <span>
             {isPrinted
@@ -85,14 +85,14 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
       </div>
 
       {/* Minimalist Virtual Thermal Paper Receipt */}
-      <div className="my-auto w-full max-w-sm flex flex-col items-center">
+      <div className="my-auto py-3 w-full max-w-sm flex flex-col items-center">
         {/* Sleek Minimalist Printer Output Slot */}
-        <div className="w-72 sm:w-80 h-3 bg-black rounded-t-md shadow-md border-b border-slate-700 print:hidden" />
+        <div className="w-68 xs:w-72 sm:w-80 h-2.5 sm:h-3 bg-black rounded-t-md shadow-md border-b border-slate-700 print:hidden" />
 
         {/* Crisp White Thermal Paper */}
         <div
           id="vvpat-receipt"
-          className="w-72 sm:w-80 bg-white border-2 border-black p-5 text-black font-mono text-xs shadow-xl select-none relative animate-in slide-in-from-top-6 duration-700"
+          className="w-68 xs:w-72 sm:w-80 bg-white border-2 border-black p-4 sm:p-5 text-black font-mono text-xs shadow-xl select-none relative animate-in slide-in-from-top-6 duration-700"
           style={{
             touchAction: 'manipulation'
           }}
@@ -162,7 +162,7 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
       </div>
 
       {/* Bottom Action & Countdown Bar */}
-      <div className="w-full max-w-sm flex flex-col items-center gap-2 mb-2 print:hidden">
+      <div className="w-full max-w-xs sm:max-w-sm flex flex-col items-center gap-1.5 sm:gap-2 mb-2 pb-safe print:hidden">
         <p className="text-xs text-slate-600 text-center">
           Silakan ambil struk kertas, lalu masukkan ke kotak suara fisik.
         </p>
