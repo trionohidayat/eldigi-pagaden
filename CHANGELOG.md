@@ -5,6 +5,20 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-13
+
+### Added
+- **Integrasi Lambang Resmi Kabupaten Subang (`CrestSubang`)**: Mengintegrasikan gambar lambang daerah resmi beresolusi tinggi dengan semboyan resmi *Benteng Pancasila* dan *Karya Utama Satya Negara* (perisai hijau berbingkai emas dengan bintang kuning, pohon beringin, dan benteng biru) yang bersumber dari gambar resmi yang diberikan pengguna.
+- **Penerapan Lambang di Berbagai Titik Kunci Aplikasi**:
+  - **Layar Bilik Suara (`/bilik`)**: Lambang resmi ditampilkan di bagian atas surat suara digital.
+  - **Layar Gerbang Pemindai QR (`QRScannerGate`)**: Lambang resmi ditampilkan di atas header pemindai.
+  - **Struk Fisik VVPAT (`ThermalReceipt`)**: Lambang resmi disematkan pada kop cetak struk termal hasil pemilihan suara.
+  - **Kartu DPT & QR Pemilih (`/cetak-qr`)**: Lambang resmi tertera pada setiap kartu pemilih C6 digital siap cetak.
+  - **Meja Pendaftaran KPPS (`/kpps`)**: Lambang resmi disematkan pada header informasi wilayah TPS.
+  - **Model C1 Elektronik (`/rekapitulasi`)**: Lambang resmi menghiasi kop Berita Acara pemungutan suara resmi.
+  - **Bilah Navigasi (`Navbar`)**: Lambang resmi ditampilkan di samping tombol kembali surat suara.
+- **Pembaruan Unit Test (`CrestSubang.test.ts`)**: Pengujian otomatis diperbarui untuk memverifikasi semboyan asli *BENTENG PANCASILA* dan *KARYA UTAMA SATYA NEGARA* serta tautan aset gambar resmi.
+
 ## [0.3.0] - 2026-11-13
 
 ### Added

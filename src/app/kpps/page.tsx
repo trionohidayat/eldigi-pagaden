@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useVote } from '@/context/VoteContext';
 import { Voter } from '@/data/dpt';
+import { CrestSubang } from '@/components/CrestSubang';
 import {
   Users,
   Search,
@@ -70,6 +71,7 @@ export default function KPPSPage() {
             </div>
             <div>
               <div className="flex items-center gap-2">
+                <CrestSubang size={20} className="flex-shrink-0" />
                 <span className="bg-sky-100 text-sky-800 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full">
                   Meja Pendaftaran
                 </span>

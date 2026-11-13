@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useVote } from '@/context/VoteContext';
 import { CANDIDATES } from '@/data/candidates';
+import { CrestSubang } from '@/components/CrestSubang';
 import {
   BarChart3,
   Trophy,
@@ -226,6 +227,9 @@ export default function RekapitulasiPage() {
           <div className="bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto p-4 sm:p-8 shadow-2xl border border-slate-300 my-auto text-slate-900">
             {/* Header C1 */}
             <div className="text-center pb-4 border-b-2 border-slate-900 space-y-1">
+              <div className="flex justify-center mb-2">
+                <CrestSubang size={48} />
+              </div>
               <h3 className="font-black text-base uppercase tracking-wider">
                 BERITA ACARA PEMUNGUTAN DAN PENGHITUNGAN SUARA
               </h3>

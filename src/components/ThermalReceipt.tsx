@@ -98,7 +98,10 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
           }}
         >
           {/* Receipt Header */}
-          <div className="text-center pb-3 border-b-2 border-dashed border-black">
+          <div className="text-center pb-3 border-b-2 border-dashed border-black flex flex-col items-center">
+            <div className="mb-1.5 flex justify-center">
+              <CrestSubang size={36} />
+            </div>
             <h4 className="font-extrabold text-xs uppercase tracking-wider">
               PEMERINTAH KABUPATEN SUBANG
             </h4>

@@ -14,6 +14,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import { CrestSubang } from './CrestSubang';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -45,6 +46,7 @@ export const Navbar: React.FC = () => {
             <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-100 group-hover:bg-red-50 group-hover:text-red-600 flex items-center justify-center transition">
               <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
+            <CrestSubang size={22} className="flex-shrink-0" />
             <span className="hidden sm:inline">Kembali ke Surat Suara</span>
             <span className="sm:hidden font-bold">Bilik Suara</span>
           </Link>
