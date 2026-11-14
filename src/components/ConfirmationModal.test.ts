@@ -36,6 +36,8 @@ describe('ConfirmationModal Component', () => {
     expect(html).toContain('Calon Nomor Urut 2');
     expect(html).toContain('BATAL');
     expect(html).toContain('YA, YAKIN');
+    expect(html).toContain('bg-emerald-600');
+    expect(html).toContain('border-emerald-600');
   });
 
   it('mendukung bahasa Sunda dalam dialog konfirmasi', () => {

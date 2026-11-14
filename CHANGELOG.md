@@ -5,6 +5,14 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-14
+
+### Changed
+- **Warna Tombol Konfirmasi "YA, YAKIN" (`ConfirmationModal`)**:
+  - Mengubah styling tombol konfirmasi "YA, YAKIN" dari warna merah menjadi warna hijau (`bg-emerald-600 hover:bg-emerald-700 border-emerald-600 shadow-emerald-600/30`) agar selaras dengan palet hijau aplikasi dan memberikan indikasi visual positif/persetujuan yang tepat bagi pemilih.
+  - Menambahkan styling kursor interaktif (`cursor-pointer`) pada tombol Batal dan tombol Ya.
+  - Memperbarui pengujian unit otomatis pada `ConfirmationModal.test.ts` untuk memastikan warna hijau tombol terverifikasi secara konsisten.
+
 ## [0.4.0] - 2026-11-13
 
 ### Added

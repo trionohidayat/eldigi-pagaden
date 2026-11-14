@@ -87,7 +87,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-black bg-white hover:bg-slate-100 active:scale-95 text-black font-bold text-xs sm:text-base flex items-center justify-center gap-1.5 transition"
+            className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-black bg-white hover:bg-slate-100 active:scale-95 text-black font-bold text-xs sm:text-base flex items-center justify-center gap-1.5 transition cursor-pointer"
           >
             <X className="w-4 h-4 text-slate-700" />
             <span>{language === 'su' ? 'BATAL' : 'BATAL'}</span>
@@ -97,7 +97,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             type="button"
             onClick={handleConfirm}
             disabled={isSubmitting}
-            className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-red-600 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-black text-xs sm:text-base flex items-center justify-center gap-1.5 shadow-lg shadow-red-600/30 transition"
+            className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-emerald-600 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs sm:text-base flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-600/30 transition cursor-pointer"
           >
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[3]" />
             <span>{language === 'su' ? 'YA, YAKIN' : 'YA, YAKIN'}</span>
