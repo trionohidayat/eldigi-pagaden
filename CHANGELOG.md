@@ -5,6 +5,14 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-11-14
+
+### Changed
+- **Pembaruan Warna Border & Indikator Pilihan Calon Terpilih (`CandidateCard`)**:
+  - Mengubah warna garis tepi (*border*) dan lingkaran penanda (*ring*) kotak calon saat dipilih (`isSelected`) dari merah (`border-red-600 ring-red-500/40`) menjadi hijau (`border-emerald-600 ring-emerald-500/40`).
+  - Menyelaraskan lencana tanda centang (✓) di sudut foto dan lencana status "TERPILIH" di bawah nama calon ke warna hijau (`text-emerald-600 border-emerald-600` dan `bg-emerald-50 border-emerald-200`) agar senada dengan identitas visual aplikasi.
+  - Memperbarui pengujian unit otomatis pada `CandidateCard.test.ts` untuk memverifikasi penandaan warna hijau saat calon dipilih (53 tests lulus 100%).
+
 ## [0.4.3] - 2026-11-14
 
 ### Changed

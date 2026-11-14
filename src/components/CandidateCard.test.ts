@@ -30,7 +30,7 @@ describe('CandidateCard Component', () => {
     expect(html).toContain(candidate1.name);
   });
 
-  it('harus merender status terpilih jika isSelected bernilai true', () => {
+  it('harus merender status terpilih dengan border hijau jika isSelected bernilai true', () => {
     const html = renderToStaticMarkup(
       React.createElement(CandidateCard, {
         candidate: candidate1,
@@ -39,7 +39,10 @@ describe('CandidateCard Component', () => {
       })
     );
     expect(html).toContain('Terpilih');
-    expect(html).toContain('border-red-600');
+    expect(html).toContain('border-emerald-600');
+    expect(html).toContain('ring-emerald-500/40');
+    expect(html).toContain('text-emerald-600');
+    expect(html).not.toContain('border-red-600');
   });
 
   it('harus merender nama calon nomor urut 2 saja tanpa title/gelar', () => {

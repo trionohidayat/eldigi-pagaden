@@ -40,7 +40,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
       aria-label={`Calon nomor ${displayNumber}: ${candidate.name}`}
       className={`group relative flex flex-col items-center bg-white border-2 transition-all duration-150 cursor-pointer select-none w-full max-w-[260px] sm:max-w-[210px] md:max-w-[230px] lg:max-w-[240px] landscape:max-w-[155px] sm:landscape:max-w-[210px] md:landscape:max-w-[230px] ${
         isSelected
-          ? 'border-red-600 ring-4 ring-red-500/40 shadow-2xl scale-[1.02]'
+          ? 'border-emerald-600 ring-4 ring-emerald-500/40 shadow-2xl scale-[1.02]'
           : 'border-black hover:border-black hover:shadow-lg'
       } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
       style={{
@@ -64,7 +64,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
 
         {/* Selected Checkmark Badge (Subtle, top-right of photo) */}
         {isSelected && (
-          <div className="absolute top-1.5 right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white text-red-600 font-black text-[10px] sm:text-xs flex items-center justify-center shadow-md border border-red-600">
+          <div className="absolute top-1.5 right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white text-emerald-600 font-black text-[10px] sm:text-xs flex items-center justify-center shadow-md border border-emerald-600">
             ✓
           </div>
         )}
@@ -77,7 +77,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           {candidate.title ? `, ${candidate.title}` : ''}
         </h3>
         {isSelected && (
-          <span className="mt-1 text-[9px] sm:text-[10px] font-bold text-red-600 uppercase tracking-widest bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
+          <span className="mt-1 text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
             Terpilih
           </span>
         )}
