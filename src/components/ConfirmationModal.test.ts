@@ -33,6 +33,8 @@ describe('ConfirmationModal Component', () => {
     expect(html).toContain('Konfirmasi Pilihan');
     expect(html).toContain('Pastikan pilihan Anda sudah benar sebelum dicetak');
     expect(html).toContain('Uly Emarita AD');
+    expect(html).not.toContain('S.E., M.M.');
+    expect(html).not.toContain('Uly Emarita AD,');
     expect(html).toContain('Calon Nomor Urut 2');
     expect(html).toContain('BATAL');
     expect(html).toContain('YA, YAKIN');

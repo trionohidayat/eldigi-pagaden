@@ -5,6 +5,14 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-11-14
+
+### Changed
+- **Pembaruan Format Nama & Gelar Calon Kades (`candidates.ts` & `rekapitulasi/page.tsx`)**:
+  - Mengosongkan data gelar akademik pada Calon No. 02 ("Uly Emarita AD") agar seragam dengan Calon No. 01 dan 03.
+  - Memperbaiki rendering nama pada tabel Model C1-KWK Elektronik (`rekapitulasi/page.tsx`) agar tidak menampilkan tanda koma gantung ketika calon tidak memiliki gelar.
+  - Memperbarui pengujian unit otomatis pada `candidates.test.ts`, `CandidateCard.test.ts`, dan `ConfirmationModal.test.ts` (53 tests lulus 100%).
+
 ## [0.4.1] - 2026-11-14
 
 ### Changed

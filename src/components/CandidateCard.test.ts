@@ -41,4 +41,18 @@ describe('CandidateCard Component', () => {
     expect(html).toContain('Terpilih');
     expect(html).toContain('border-red-600');
   });
+
+  it('harus merender nama calon nomor urut 2 saja tanpa title/gelar', () => {
+    const candidate2 = CANDIDATES[1];
+    const html = renderToStaticMarkup(
+      React.createElement(CandidateCard, {
+        candidate: candidate2,
+        onSelect: () => {},
+        isSelected: false
+      })
+    );
+    expect(html).toContain('Uly Emarita AD');
+    expect(html).not.toContain('S.E., M.M.');
+    expect(html).not.toContain('Uly Emarita AD,');
+  });
 });

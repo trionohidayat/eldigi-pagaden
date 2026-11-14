@@ -61,7 +61,7 @@ export const CANDIDATES: Candidate[] = [
     id: 2,
     number: '02',
     name: 'Uly Emarita AD',
-    title: 'S.E., M.M.',
+    title: '',
     slogan: 'Pagaden Maju, Transparan, & Berdaya',
     photoUrl: '/images/candidates/uly-emarita-ad.jpg',
     vision: 'Mewujudkan tata kelola desa berbasis digital, pelayanan publik transparan, serta penguatan ekonomi UMKM dan perempuan.',

@@ -18,12 +18,12 @@ describe('CANDIDATES Master Data', () => {
     expect(candidate01?.avatarStyle.badgeLabel).toBe('Calon No. 01');
   });
 
-  it('harus memuat Calon No 02 Uly Emarita AD beserta foto resminya dengan benar', () => {
+  it('harus memuat Calon No 02 Uly Emarita AD beserta foto resminya dengan benar tanpa title', () => {
     const candidate02 = CANDIDATES.find(c => c.number === '02');
     expect(candidate02).toBeDefined();
     expect(candidate02?.id).toBe(2);
     expect(candidate02?.name).toBe('Uly Emarita AD');
-    expect(candidate02?.title).toBe('S.E., M.M.');
+    expect(candidate02?.title).toBe('');
     expect(candidate02?.slogan).toContain('Pagaden Maju');
     expect(candidate02?.avatarStyle.badgeLabel).toBe('Calon No. 02');
     expect(candidate02?.photoUrl).toBe('/images/candidates/uly-emarita-ad.jpg');

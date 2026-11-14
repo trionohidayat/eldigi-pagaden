@@ -261,7 +261,7 @@ export default function RekapitulasiPage() {
                         {c.number}
                       </td>
                       <td className="py-2.5 px-3 border-r border-slate-300 font-sans font-bold">
-                        {c.name}, {c.title}
+                        {c.name}{c.title ? `, ${c.title}` : ''}
                       </td>
                       <td className="py-2.5 px-3 border-r border-slate-300 text-center font-bold text-sm">
                         {votes[c.id] || 0}
