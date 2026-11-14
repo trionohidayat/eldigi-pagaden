@@ -28,7 +28,7 @@ describe('ThermalReceipt Component', () => {
     expect(html).toContain('Sedang Mencetak Struk Suara (VVPAT)...');
   });
 
-  it('harus menampilkan nomor dan nama kandidat yang dipilih pada struk', () => {
+  it('harus merahasiakan pilihan kepala desa pada struk (tidak menampilkan nomor & nama calon, hanya QR/Barcode & kode hash)', () => {
     const html = renderToStaticMarkup(
       React.createElement(ThermalReceipt, {
         lastVote: mockLastVote,
@@ -36,9 +36,15 @@ describe('ThermalReceipt Component', () => {
         language: 'id'
       })
     );
-    expect(html).toContain('NOMOR 2');
-    expect(html).toContain('Uly Emarita AD');
+    // Asas Rahasia: Struk tidak menampilkan nomor kandidat, nama kandidat, atau teks PILIHAN KEPALA DESA
+    expect(html).not.toContain('PILIHAN KEPALA DESA:');
+    expect(html).not.toContain('NOMOR 2');
+    expect(html).not.toContain('Uly Emarita AD');
+
+    // Struk tetap memuat bukti verifikasi autentik berupa HASH / No. Bukti dan instruksi kotak suara
     expect(html).toContain('PGD-TPS01-02-X7K9');
+    expect(html).toContain('HASH:');
+    expect(html).toContain('Struk fisik ini adalah bukti sah pilihan Anda');
   });
 
   it('harus menampilkan pesan TERIMA KASIH dan konfirmasi Pilihan Anda Tersimpan', () => {

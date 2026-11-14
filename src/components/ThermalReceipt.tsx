@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { LastVoteInfo } from '@/context/VoteContext';
 import { CrestSubang } from './CrestSubang';
+import QRCode from 'qrcode';
 import confetti from 'canvas-confetti';
 import { Printer, ArrowRight, CheckCircle2 } from 'lucide-react';
 
@@ -23,6 +24,41 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
 }) => {
   const [countdown, setCountdown] = useState(autoResetSeconds);
   const [isPrinted, setIsPrinted] = useState(false);
+  const [qrSvg, setQrSvg] = useState<string>(() => {
+    try {
+      let initialSvg = '';
+      QRCode.toString(
+        lastVote.receiptCode,
+        {
+          type: 'svg',
+          margin: 1,
+          color: { dark: '#000000', light: '#ffffff' }
+        },
+        (err, str) => {
+          if (!err && str) initialSvg = str;
+        }
+      );
+      return initialSvg;
+    } catch {
+      return '';
+    }
+  });
+
+  useEffect(() => {
+    if (!qrSvg) {
+      QRCode.toString(
+        lastVote.receiptCode,
+        {
+          type: 'svg',
+          margin: 1,
+          color: { dark: '#000000', light: '#ffffff' }
+        },
+        (err, str) => {
+          if (!err && str) setQrSvg(str);
+        }
+      );
+    }
+  }, [lastVote.receiptCode, qrSvg]);
 
   useEffect(() => {
     // Subtle celebratory confetti
@@ -56,8 +92,6 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
   const handleManualPrint = () => {
     window.print();
   };
-
-  const displayNumber = parseInt(lastVote.candidateNumber, 10) || lastVote.candidateNumber;
 
   return (
     <div
@@ -164,22 +198,17 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
             </div>
           </div>
 
-          {/* Chosen Candidate Minimalist Box */}
-          <div className="my-3 p-3 bg-slate-50 border-2 border-black text-center">
-            <div className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">
-              PILIHAN KEPALA DESA:
-            </div>
-            <div className="text-2xl sm:text-3xl font-black text-black my-1 font-sans">
-              NOMOR {displayNumber}
-            </div>
-            <div className="text-xs sm:text-sm font-bold text-black uppercase border-t border-black/20 pt-1 font-sans">
-              {lastVote.candidateName}
-              {lastVote.candidateTitle ? `, ${lastVote.candidateTitle}` : ''}
-            </div>
-          </div>
+          {/* Verification Section: QR Code & Barcode (Kerahasiaan Suara Terjaga - Tanpa Informasi Calon) */}
+          <div className="pt-3 pb-1 flex flex-col items-center text-center">
+            {/* QR Code representation */}
+            {qrSvg && (
+              <div
+                className="w-24 h-24 sm:w-28 sm:h-28 mx-auto flex items-center justify-center p-1 bg-white border border-black/20 rounded-xs mb-2 [&>svg]:w-full [&>svg]:h-full"
+                dangerouslySetInnerHTML={{ __html: qrSvg }}
+              />
+            )}
 
-          {/* Barcode representation */}
-          <div className="pt-2 border-t border-dashed border-black flex flex-col items-center text-center">
+            {/* Barcode representation */}
             <div className="w-full flex justify-center items-center h-6 gap-0.5 my-1">
               {[2, 1, 3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 1, 3, 2, 1, 4, 2, 1, 3].map((w, idx) => (
                 <div
@@ -192,7 +221,7 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
             <div className="text-[9px] font-mono text-slate-600 tracking-wider">
               HASH: {lastVote.receiptCode}
             </div>
-            <p className="text-[9px] text-slate-600 italic mt-2 leading-tight">
+            <p className="text-[9px] text-slate-600 italic mt-2.5 leading-tight">
               &quot;Struk fisik ini adalah bukti sah pilihan Anda. Masukkan ke dalam kotak suara fisik.&quot;
             </p>
           </div>

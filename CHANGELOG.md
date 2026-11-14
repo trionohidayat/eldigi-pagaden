@@ -5,6 +5,14 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-11-14
+
+### Changed
+- **Penjaminan Kerahasiaan Pilihan Suara pada Struk Fisik VVPAT (`ThermalReceipt`)**:
+  - Menghapus informasi calon kepala desa yang dipilih (nomor urut, nama calon, dan kotak "PILIHAN KEPALA DESA:") dari struk cetak VVPAT sesuai prinsip asas pemilu LUBER (Langsung, Umum, Bebas, Rahasia).
+  - Mengganti bagian tersebut dengan verifikasi kode QR 2D dan Barcode 1D autentik yang memuat hash bukti pemilihan digital (`receiptCode`) serta instruksi memasukkan struk fisik ke dalam kotak suara.
+  - Memperbarui pengujian unit otomatis pada `ThermalReceipt.test.ts` untuk memvalidasi bahwa identitas pilihan pemilih terjamin rahasia dan tidak ditampilkan pada struk cetak (53 tests lulus 100%).
+
 ## [0.4.2] - 2026-11-14
 
 ### Changed
