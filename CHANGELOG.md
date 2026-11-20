@@ -5,6 +5,15 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-11-20
+
+### Changed
+- **Pembaruan Format Default Surat Undangan Menjadi 1 Halaman Penuh Berukuran A4 (`PrintableQRCards`)**:
+  - Mengonfigurasi tata letak default menjadi **1 Halaman Penuh A4 (210 x 297 mm)** per pemilih dengan gaya lembaran resmi portrait (`.a4-sheet`).
+  - Mengoptimalkan proporsi elemen pada kertas A4: ukuran kop lambang daerah Subang lebih proporsional, QR Code resolusi tinggi (160x160 px), kotak pembatas rahasia merah yang lega, tabel rincian jadwal & bilik suara yang mudah dibaca, serta stempel ungu dinas yang tajam.
+  - Memperbarui aturan `@media print` dengan pemisah halaman otomatis (`page-break-after: always; break-after: page;`) sehingga setiap pemilih tercetak tepat pada 1 lembar kertas A4 tanpa terpotong atau menimbulkan halaman kosong berlebih.
+  - Mempertahankan opsi tombol cetak dan toggle format untuk fleksibilitas panitia pemilihan.
+
 ## [0.5.1] - 2026-11-20
 
 ### Added
