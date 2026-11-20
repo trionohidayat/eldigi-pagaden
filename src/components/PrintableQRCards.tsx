@@ -21,11 +21,11 @@ const ThumbGuideGraphic: React.FC<{ className?: string }> = ({ className = '' })
     viewBox="0 0 52 64"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`w-11 h-15 sm:w-13 sm:h-17 flex-shrink-0 ${className}`}
+    className={`w-12 h-16 sm:w-14 sm:h-18 flex-shrink-0 ${className}`}
     aria-label="Posisi Ibu Jari pada Ujung Kertas"
   >
     {/* Base shadow */}
-    <ellipse cx="26" cy="62" rx="15" ry="2" fill="#CBD5E1" />
+    <ellipse cx="26" cy="62" rx="16" ry="2" fill="#CBD5E1" />
 
     {/* Thumb skin / contour */}
     <path
@@ -167,8 +167,7 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
   const [qrSVGs, setQrSVGs] = useState<Record<string, string>>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [dusunFilter, setDusunFilter] = useState<string>('all');
-  // Default to 1 full A4 page as requested by user
-  const [printLayout, setPrintLayout] = useState<'a4_single' | 'a5_two_cols'>('a4_single');
+  const [hasBorderFrame, setHasBorderFrame] = useState<boolean>(false);
 
   // Pre-generate QR Code SVGs for all voters
   useEffect(() => {
@@ -210,50 +209,53 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
   const cleanDesaName = tpsConfig.desa.replace(/^desa\s+/i, '');
 
   return (
-    <div className="w-full min-h-screen bg-slate-200/80 text-slate-900 flex flex-col font-sans">
-      {/* Print CSS Stylesheet specifically tailored for 1 Full A4 Page per Voter */}
+    <div className="w-full min-h-screen bg-slate-300 text-slate-900 flex flex-col font-sans">
+      {/* Precision Print CSS Stylesheet for Exact 1 A4 Page Per Voter */}
       <style>{`
         @media print {
           @page {
             size: A4 portrait;
-            margin: 0;
+            margin: 10mm 12mm 10mm 12mm;
           }
           html, body {
             margin: 0 !important;
             padding: 0 !important;
             background: white !important;
+            color: black !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
-          .no-print {
+          .no-print, header, nav {
             display: none !important;
           }
-          .a4-sheet {
-            width: 210mm !important;
-            min-height: 297mm !important;
-            height: 297mm !important;
-            max-height: 297mm !important;
-            padding: 14mm 15mm 12mm 15mm !important;
+          main {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+          }
+          .a4-print-page {
+            width: 100% !important;
+            height: calc(297mm - 20mm) !important;
+            min-height: calc(297mm - 20mm) !important;
+            max-height: calc(297mm - 20mm) !important;
             box-sizing: border-box !important;
             page-break-after: always !important;
             break-after: page !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            border: 2px solid black !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
+            box-shadow: none !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
-          }
-          .a5-sheet {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
+            background: white !important;
           }
         }
       `}</style>
 
       {/* Non-print Top Controls Bar */}
-      <div className="sticky top-0 z-30 bg-white border-b border-slate-200 px-3 sm:px-8 py-3 sm:py-4 shadow-sm print:hidden">
+      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-3 sm:px-8 py-3 sm:py-4 shadow-sm print:hidden">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-2.5 sm:gap-3">
             {onClose ? (
@@ -312,29 +314,29 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
               />
             </div>
 
-            {/* Layout Toggle (Default: 1 Halaman Penuh A4) */}
+            {/* Frame Toggle */}
             <div className="inline-flex rounded-xl border border-slate-300 bg-slate-100 p-0.5 text-xs font-semibold">
               <button
                 type="button"
-                onClick={() => setPrintLayout('a4_single')}
+                onClick={() => setHasBorderFrame(false)}
                 className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  printLayout === 'a4_single'
+                  !hasBorderFrame
                     ? 'bg-red-600 text-white shadow-xs font-bold'
                     : 'text-slate-600 hover:text-black'
                 }`}
               >
-                1 Halaman Penuh A4
+                Standar Surat (Rapi)
               </button>
               <button
                 type="button"
-                onClick={() => setPrintLayout('a5_two_cols')}
+                onClick={() => setHasBorderFrame(true)}
                 className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  printLayout === 'a5_two_cols'
+                  hasBorderFrame
                     ? 'bg-red-600 text-white shadow-xs font-bold'
                     : 'text-slate-600 hover:text-black'
                 }`}
               >
-                2 Undangan / Lembar
+                Dengan Bingkai
               </button>
             </div>
 
@@ -352,28 +354,22 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
       </div>
 
       {/* Main Container */}
-      <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+      <main className="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full">
         {/* Info Banner for Panitia */}
-        <div className="mb-6 print:hidden bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-900 text-xs sm:text-sm flex items-start gap-3 shadow-xs">
+        <div className="mb-6 print:hidden bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-900 text-xs sm:text-sm flex items-start gap-3 shadow-xs max-w-4xl mx-auto">
           <span className="text-xl">📄</span>
           <div className="space-y-1">
             <div className="font-bold text-amber-950">
-              Format Standar: 1 Halaman Penuh Berukuran A4 (Model C6-KWK Resmi):
+              Format Standar: 1 Halaman Penuh Berukuran A4 per Pemilih:
             </div>
             <p className="text-[12px] leading-relaxed text-amber-900">
-              Setiap pemilih akan dicetak pada **1 lembar kertas A4 penuh**. Tata letak telah disesuaikan dengan proporsi kertas A4 (210 x 297 mm) lengkap dengan **Kop Surat Daerah**, **QR Code resolusi tinggi**, **Kotak Rahasia Merah**, **Detail Alamat &amp; Bilik Suara**, **Cap Stempel Ungu Panitia**, serta **Petunjuk Posisi Ibu Jari di Ujung Bawah** untuk memudahkan proses scan di bilik suara.
+              Setiap pemilih menempati **1 lembar kertas A4 tersendiri (210 x 297 mm)**. Tata letak elemen proporsional dan seimbang dari atas hingga bawah, dilengkapi Kop Lambang Subang, QR Code besar, Kotak Rahasia Merah, Detail Jadwal, Cap Stempel Panitia, serta Petunjuk Posisi Ibu Jari di Ujung Bawah.
             </p>
           </div>
         </div>
 
-        {/* Invitation Letters Container */}
-        <div
-          className={
-            printLayout === 'a4_single'
-              ? 'space-y-10 print:space-y-0 max-w-4xl mx-auto'
-              : 'grid grid-cols-1 md:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 print:p-0'
-          }
-        >
+        {/* Invitation Letters Stack (Each represents exactly 1 A4 Sheet) */}
+        <div className="space-y-12 print:space-y-0 max-w-4xl mx-auto">
           {filteredVoters.map((voter, index) => {
             const bilikNumber = (index % 3) + 1;
             const dptNumber = String(900 + index + 1);
@@ -381,82 +377,51 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
             return (
               <div
                 key={voter.nik}
-                className={
-                  printLayout === 'a4_single'
-                    ? 'a4-sheet relative bg-white border-2 border-black rounded-xs p-6 sm:p-10 flex flex-col justify-between shadow-xl print:shadow-none print:border-2 print:border-black text-black font-sans mx-auto'
-                    : 'a5-sheet relative bg-white border-2 border-black rounded-xs p-4 sm:p-5 flex flex-col justify-between shadow-md print:shadow-none print:border-2 print:border-black text-black font-sans'
-                }
+                className={`a4-print-page bg-white text-black font-sans shadow-2xl print:shadow-none mx-auto ${
+                  hasBorderFrame ? 'border-2 border-black p-6 sm:p-10' : 'p-6 sm:p-10'
+                }`}
                 style={{
-                  // Authentic A4 proportion for desktop preview: width 794px, minHeight 1123px (standard 96 DPI A4)
-                  maxWidth: printLayout === 'a4_single' ? '794px' : undefined,
-                  minHeight: printLayout === 'a4_single' ? '1060px' : '520px'
+                  width: '100%',
+                  maxWidth: '794px', // 210mm at 96 DPI
+                  minHeight: '1123px', // 297mm at 96 DPI
+                  boxSizing: 'border-box'
                 }}
               >
                 {/* 1. TOP HEADER: Kop Surat Undangan Resmi */}
                 <div className="flex items-center justify-between border-b-2 border-black pb-3 sm:pb-4 mb-3 sm:mb-4">
                   {/* Left: Lambang Daerah Subang */}
-                  <div className="w-16 sm:w-20 flex-shrink-0 flex items-center justify-start">
-                    <CrestSubang size={printLayout === 'a4_single' ? 58 : 46} className="sm:scale-105" />
+                  <div className="w-18 sm:w-22 flex-shrink-0 flex items-center justify-start">
+                    <CrestSubang size={62} className="sm:scale-105" />
                   </div>
 
                   {/* Center: Title */}
                   <div className="text-center flex-1 px-2">
-                    <h2
-                      className={`font-black tracking-tight uppercase leading-tight text-black font-sans ${
-                        printLayout === 'a4_single' ? 'text-base sm:text-xl' : 'text-xs sm:text-sm'
-                      }`}
-                    >
+                    <h2 className="text-base sm:text-xl font-black tracking-tight uppercase leading-tight text-black font-sans">
                       SURAT UNDANGAN
                     </h2>
-                    <h2
-                      className={`font-black tracking-tight uppercase leading-tight text-black font-sans ${
-                        printLayout === 'a4_single' ? 'text-base sm:text-xl' : 'text-xs sm:text-sm'
-                      }`}
-                    >
+                    <h2 className="text-base sm:text-xl font-black tracking-tight uppercase leading-tight text-black font-sans">
                       PEMUNGUTAN SUARA
                     </h2>
-                    <h3
-                      className={`font-black tracking-wider uppercase leading-tight text-black font-sans mt-0.5 ${
-                        printLayout === 'a4_single' ? 'text-sm sm:text-base' : 'text-[11px] sm:text-xs'
-                      }`}
-                    >
+                    <h3 className="text-sm sm:text-base font-black tracking-wider uppercase leading-tight text-black font-sans mt-0.5">
                       KEPADA PEMILIH
                     </h3>
                   </div>
 
                   {/* Right: No Urut DPT */}
                   <div className="w-22 sm:w-26 flex-shrink-0 text-center font-sans">
-                    <div
-                      className={`font-bold text-black uppercase leading-tight ${
-                        printLayout === 'a4_single' ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-[11px]'
-                      }`}
-                    >
+                    <div className="text-xs sm:text-sm font-bold text-black uppercase leading-tight">
                       No Urut DPT
                     </div>
-                    <div
-                      className={`font-black text-black leading-none mt-1 font-mono ${
-                        printLayout === 'a4_single' ? 'text-2xl sm:text-4xl' : 'text-lg sm:text-2xl'
-                      }`}
-                    >
+                    <div className="text-2xl sm:text-4xl font-black text-black leading-none mt-1 font-mono">
                       {dptNumber}
                     </div>
                   </div>
                 </div>
 
                 {/* 2. ROW 2: High Resolution QR Code (Left) & Two Outlined Warning Boxes (Right) */}
-                <div
-                  className={`flex items-center gap-4 sm:gap-6 ${
-                    printLayout === 'a4_single' ? 'mb-5 sm:mb-6' : 'mb-2.5'
-                  }`}
-                >
+                <div className="flex items-center gap-5 sm:gap-6 mb-4 sm:mb-5">
                   {/* High Quality Square QR Code */}
-                  <div
-                    className={`border-2 border-black p-1.5 bg-white flex items-center justify-center flex-shrink-0 ${
-                      printLayout === 'a4_single'
-                        ? 'w-34 h-34 sm:w-42 sm:h-42'
-                        : 'w-26 h-26 sm:w-30 sm:h-30'
-                    }`}
-                  >
+                  <div className="w-36 h-36 sm:w-44 sm:h-44 border-2 border-black p-1.5 bg-white flex items-center justify-center flex-shrink-0">
                     {qrSVGs[voter.nik] ? (
                       <div
                         className="w-full h-full [&>svg]:w-full [&>svg]:h-full"
@@ -470,37 +435,17 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
                   </div>
 
                   {/* Two Stacked Outlined Boxes */}
-                  <div
-                    className={`flex-1 flex flex-col justify-center ${
-                      printLayout === 'a4_single' ? 'gap-3 sm:gap-4' : 'gap-2'
-                    }`}
-                  >
+                  <div className="flex-1 flex flex-col justify-center gap-3 sm:gap-4">
                     {/* Top Box: Red Border, Red Bold Text */}
-                    <div
-                      className={`border-[2px] border-red-600 bg-red-50/50 text-center rounded-2xs ${
-                        printLayout === 'a4_single' ? 'py-2.5 sm:py-3.5 px-3' : 'py-1.5 px-2'
-                      }`}
-                    >
-                      <span
-                        className={`font-black text-red-600 tracking-wide uppercase font-sans ${
-                          printLayout === 'a4_single' ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-[11px]'
-                        }`}
-                      >
+                    <div className="border-[2px] border-red-600 bg-red-50/50 py-3 sm:py-4 px-3 text-center rounded-2xs">
+                      <span className="text-xs sm:text-sm font-black text-red-600 tracking-wide uppercase font-sans">
                         SURAT UNDANGAN INI BERSIFAT RAHASIA
                       </span>
                     </div>
 
                     {/* Bottom Box: Black Border, Black Text */}
-                    <div
-                      className={`border-2 border-black text-center rounded-2xs bg-white ${
-                        printLayout === 'a4_single' ? 'py-2.5 sm:py-3 px-3' : 'py-1.5 px-2'
-                      }`}
-                    >
-                      <span
-                        className={`font-bold text-black font-sans leading-tight ${
-                          printLayout === 'a4_single' ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-[11px]'
-                        }`}
-                      >
+                    <div className="border-2 border-black py-3 sm:py-3.5 px-3 text-center rounded-2xs bg-white">
+                      <span className="text-xs sm:text-sm font-bold text-black font-sans leading-tight">
                         Tunjukan QRcode berikut saat akan memilih
                       </span>
                     </div>
@@ -508,110 +453,74 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
                 </div>
 
                 {/* 3. NOTICE BODY PARAGRAPH */}
-                <div
-                  className={`text-black leading-relaxed font-sans ${
-                    printLayout === 'a4_single' ? 'text-xs sm:text-sm mb-4 sm:mb-5' : 'text-[10.5px] sm:text-[11.5px] mb-1.5'
-                  }`}
-                >
+                <div className="text-xs sm:text-sm text-black leading-relaxed font-sans mb-3 sm:mb-4">
                   <p className="mb-1">
                     Bersama ini diberitahukan bahwa Panitia Pemilihan mengundang Saudara/i:
                   </p>
                   <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                    <span
-                      className={`font-black uppercase text-black ${
-                        printLayout === 'a4_single' ? 'text-sm sm:text-base' : 'text-[11px] sm:text-[12px]'
-                      }`}
-                    >
+                    <span className="font-black uppercase text-black text-sm sm:text-base">
                       {voter.name}
                     </span>
-                    <span className="text-slate-800">
+                    <span className="text-slate-800 text-xs sm:text-sm">
                       (NIK: <span className="font-mono font-bold tracking-wider">{voter.nik}</span>)
                     </span>
-                    <span className="text-slate-800">
+                    <span className="text-slate-800 text-xs sm:text-sm">
                       untuk memberikan suara pada pemilihan:
                     </span>
                   </div>
-                  <p
-                    className={`font-black uppercase tracking-tight text-black ${
-                      printLayout === 'a4_single' ? 'text-sm sm:text-base mt-1' : 'text-[11px] sm:text-[12px]'
-                    }`}
-                  >
+                  <p className="font-black uppercase tracking-tight text-black text-sm sm:text-base mt-1">
                     PEMILIHAN KEPALA DESA {cleanDesaName.toUpperCase()} yang akan dilaksanakan pada:
                   </p>
                 </div>
 
                 {/* 4. ALIGNED DETAILS TABLE */}
-                <table
-                  className={`w-full font-sans text-black ${
-                    printLayout === 'a4_single' ? 'text-xs sm:text-sm mb-4 sm:mb-5' : 'text-[10.5px] sm:text-[11.5px] mb-1.5'
-                  }`}
-                >
+                <table className="w-full text-xs sm:text-sm font-sans text-black mb-3 sm:mb-4">
                   <tbody>
                     <tr>
-                      <td
-                        className={`font-semibold ${
-                          printLayout === 'a4_single' ? 'w-36 sm:w-44 py-1.5' : 'w-28 sm:w-32 py-0.5'
-                        }`}
-                      >
-                        Hari/Tanggal
-                      </td>
+                      <td className="w-36 sm:w-44 font-semibold py-1.5 sm:py-2">Hari/Tanggal</td>
                       <td className="w-3 text-center">:</td>
-                      <td className="font-bold py-1">Minggu, 08 November 2026</td>
+                      <td className="font-bold py-1.5 sm:py-2">Minggu, 08 November 2026</td>
                     </tr>
                     <tr>
-                      <td className="font-semibold py-1">Pukul</td>
+                      <td className="font-semibold py-1.5 sm:py-2">Pukul</td>
                       <td className="text-center">:</td>
-                      <td className="font-bold py-1">07:00 s/d 13:00 WIB</td>
+                      <td className="font-bold py-1.5 sm:py-2">07:00 s/d 13:00 WIB</td>
                     </tr>
                     <tr>
-                      <td className="font-semibold py-1">Nomor TPS</td>
+                      <td className="font-semibold py-1.5 sm:py-2">Nomor TPS</td>
                       <td className="text-center">:</td>
-                      <td className="font-bold py-1">{tpsConfig.tpsNumber}</td>
+                      <td className="font-bold py-1.5 sm:py-2">{tpsConfig.tpsNumber}</td>
                     </tr>
                     <tr>
-                      <td className="font-semibold py-1 align-top">Alamat TPS</td>
+                      <td className="font-semibold py-1.5 sm:py-2 align-top">Alamat TPS</td>
                       <td className="text-center align-top">:</td>
-                      <td className="font-bold py-1 uppercase leading-snug">
+                      <td className="font-bold py-1.5 sm:py-2 uppercase leading-snug">
                         {voter.dusun} RT. {voter.rt} RW. {voter.rw} DESA {cleanDesaName.toUpperCase()} KEC. {tpsConfig.kecamatan.toUpperCase()}
                       </td>
                     </tr>
                     <tr>
-                      <td className="font-semibold py-1">Nomor Bilik Suara</td>
+                      <td className="font-semibold py-1.5 sm:py-2">Nomor Bilik Suara</td>
                       <td className="text-center">:</td>
-                      <td className="font-bold py-1">Bilik Suara Nomor {bilikNumber}</td>
+                      <td className="font-bold py-1.5 sm:py-2">Bilik Suara Nomor {bilikNumber}</td>
                     </tr>
                   </tbody>
                 </table>
 
                 {/* 5. CATATAN RESMI */}
-                <div
-                  className={`text-justify leading-relaxed text-slate-900 font-sans border-t-2 border-b-2 border-dashed border-slate-400 ${
-                    printLayout === 'a4_single' ? 'text-xs sm:text-[13px] py-3 my-4 sm:my-5' : 'text-[9.5px] sm:text-[10px] py-1.5 my-1.5'
-                  }`}
-                >
+                <div className="text-justify leading-relaxed text-slate-900 font-sans border-t-2 border-b-2 border-dashed border-slate-400 text-xs sm:text-[13px] py-2.5 sm:py-3 my-3 sm:my-4">
                   <span className="font-bold">Catatan : </span>
                   Surat Undangan ini beserta KTP Elektronik harus dibawa pada saat pencoblosan dan tidak boleh diwakilkan. Surat Undangan ini tidak boleh disebarluaskan, duplikasi atau diperlihatkan kepada pihak yang tidak berkepentingan.
                 </div>
 
                 {/* 6. SIGNATURES & OFFICIAL STAMP */}
-                <div
-                  className={`grid grid-cols-2 gap-4 font-sans text-black ${
-                    printLayout === 'a4_single'
-                      ? 'text-xs sm:text-sm pt-2 mb-4 sm:mb-6 min-h-[110px] sm:min-h-[130px]'
-                      : 'text-[10px] sm:text-[11px] pt-1 mb-1 min-h-[80px]'
-                  }`}
-                >
+                <div className="grid grid-cols-2 gap-4 text-xs sm:text-sm font-sans text-black pt-2 mb-3 sm:mb-4 min-h-[120px] sm:min-h-[140px]">
                   {/* Left: Yang Menerima */}
                   <div className="flex flex-col justify-between text-center">
                     <div>
                       <div className="text-slate-600">........................ 2026</div>
                       <div className="font-semibold mt-0.5">Yang Menerima,</div>
                     </div>
-                    <div
-                      className={`font-bold ${
-                        printLayout === 'a4_single' ? 'pt-8 sm:pt-12 text-sm sm:text-base' : 'pt-4 text-[10px] sm:text-[11px]'
-                      }`}
-                    >
+                    <div className="font-bold pt-8 sm:pt-14 text-sm sm:text-base">
                       ( {voter.name} )
                     </div>
                   </div>
@@ -624,30 +533,18 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
                     </div>
 
                     {/* Official Purple Stamp & Signature */}
-                    <div
-                      className={`relative flex items-center justify-center ${
-                        printLayout === 'a4_single' ? 'my-1 h-14' : 'my-0.5 h-10'
-                      }`}
-                    >
+                    <div className="relative flex items-center justify-center my-1 h-14 sm:h-16">
                       <PanitiaStamp
                         desaName={cleanDesaName}
-                        className={`absolute ${printLayout === 'a4_single' ? '-top-8 sm:-top-10' : '-top-6'}`}
+                        className="absolute -top-8 sm:-top-10"
                       />
                     </div>
 
                     <div>
-                      <div
-                        className={`font-black underline uppercase ${
-                          printLayout === 'a4_single' ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-[11px]'
-                        }`}
-                      >
+                      <div className="font-black underline uppercase text-xs sm:text-sm">
                         Drs. H. Maman Suryaman, S.Pd.I
                       </div>
-                      <div
-                        className={`text-slate-600 font-mono mt-0.5 ${
-                          printLayout === 'a4_single' ? 'text-[10px] sm:text-xs' : 'text-[8.5px] sm:text-[9px]'
-                        }`}
-                      >
+                      <div className="text-slate-600 font-mono mt-0.5 text-[10px] sm:text-xs">
                         Tgl cetak: 02/11/2026 15:14 WIB
                       </div>
                     </div>
@@ -655,19 +552,9 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
                 </div>
 
                 {/* 7. BOTTOM INSTRUCTION: Kotak Panduan Pegang Surat & Ikon Jempol */}
-                <div
-                  className={`flex items-center justify-start gap-4 pt-3 border-t-2 border-black mt-auto ${
-                    printLayout === 'a4_single' ? 'pb-1' : 'pt-1.5'
-                  }`}
-                >
+                <div className="flex items-center justify-start gap-4 pt-3 border-t-2 border-black mt-auto pb-1">
                   {/* Outlined Instruction Box */}
-                  <div
-                    className={`border-2 border-black font-sans text-black font-bold text-center bg-white ${
-                      printLayout === 'a4_single'
-                        ? 'p-2.5 sm:p-3 text-[11px] sm:text-xs max-w-[280px] sm:max-w-[320px] leading-snug'
-                        : 'p-1.5 sm:p-2 text-[8.5px] sm:text-[9px] max-w-[210px] leading-tight'
-                    }`}
-                  >
+                  <div className="border-2 border-black font-sans text-black font-bold text-center bg-white p-2.5 sm:p-3 text-[11px] sm:text-xs max-w-[280px] sm:max-w-[320px] leading-snug">
                     Letakan posisi tangan ditengah-tengah ujung bawah persis seperti pada gambar untuk memudahkan proses scan QRCode
                   </div>
 
@@ -680,13 +567,6 @@ export const PrintableQRCards: React.FC<PrintableQRCardsProps> = ({
                     FORMULIR MODEL C6-KWK
                   </div>
                 </div>
-
-                {/* Subtle Cut Mark Guide for Double Column Print */}
-                {printLayout === 'a5_two_cols' && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] font-mono text-slate-400 print:text-black no-print">
-                    ✂ - - - - - - - - - - - - - - - - - - ✂
-                  </div>
-                )}
               </div>
             );
           })}

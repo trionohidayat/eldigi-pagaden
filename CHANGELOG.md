@@ -5,6 +5,15 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.3] - 2026-11-20
+
+### Fixed
+- **Perbaikan Margin & Kerapian Tata Letak Cetak A4 Surat Undangan (`PrintableQRCards`)**:
+  - Menghilangkan bingkai kotak luar yang mengambang dan terpotong di print preview; mengaktifkan mode **"Standar Surat (Rapi)"** secara default sesuai foto asli di mana kertas A4 itu sendiri adalah lembaran resminya dengan garis horizontal kop di atas dan garis pembatas panduan jempol di bawah.
+  - Memperbaiki margin cetak presisi `@page { size: A4 portrait; margin: 10mm 12mm; }` sehingga tidak terjadi pemotongan garis (*page break clipping*) atau spasi kosong berlebih antar halaman.
+  - Menyeimbangkan distribusi vertikal elemen (Kop, QR Code, Tabel Jadwal, Catatan, dan Tanda Tangan) agar proporsional dan elegan dari atas hingga batas bawah kertas A4.
+  - Menyediakan tombol sakelar *"Standar Surat (Rapi)"* dan *"Dengan Bingkai"* untuk kebebasan preferensi cetak panitia.
+
 ## [0.5.2] - 2026-11-20
 
 ### Changed
