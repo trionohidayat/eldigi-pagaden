@@ -14,9 +14,9 @@ describe('BilikSuaraPage Component', () => {
       )
     );
 
-    // Verify QRScannerGate is rendered
-    expect(html).toContain('SURAT SUARA DIGITAL');
-    expect(html).toContain('Arahkan QR Code ke Kamera');
-    expect(html).toContain('Langkah 1: Pindai Kartu Suara Pemilih');
+    // Verify QRScannerGate is rendered with clean kiosk viewfinder
+    expect(html).toContain('Letakkan QR code di dalam frame');
+    expect(html).toContain('scanner-laser');
+    expect(html).toContain('Menu Petugas KPPS');
   });
 });

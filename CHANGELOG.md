@@ -5,7 +5,21 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
-## [0.5.3] - 2026-11-20
+## [0.5.4] - 2026-11-20
+
+### Changed
+- **Pembersihan & Minimalisasi Antarmuka Bilik Suara Kiosk Mode (`QRScannerGate`)**:
+  - Menghilangkan seluruh elemen administratif di luar dan di atas kamera sesuai permintaan tanda silang merah pada foto referensi tablet fisik:
+    - Menghapus header atas: Lambang Kabupaten Subang, judul *"SURAT SUARA DIGITAL"*, dan subjudul *"PEMILIHAN KEPALA DESA PAGADEN • TPS 01"*.
+    - Menghapus badge informasi kanan atas: Status *"Google Voice: Aktif"* dan *"Langkah 1: Pindai Kartu Suara Pemilih"*.
+    - Menghapus kotak panduan mengambang di bagian atas jendela kamera (*"Arahkan kamera ke QR code..."* dan *"Total pemilih"*).
+    - Menghapus pil status bawah di dalam kamera (*"Siap melakukan pemindaian"*).
+    - Menghapus panel kontrol administratif di bawah kamera (*"Kamera Belakang (Tablet)"*, tombol ganti kamera, form input manual NIK/USB barcode scanner, tombol verifikasi, daftar warga simulasi cepat DPT, dan link cetak kartu).
+  - Memaksimalkan area tampilan kamera (*viewfinder*) layar penuh (`aspect-[4/3]` hingga `16/9`, `max-h-[88vh]`) agar fokus penuh pada pemindaian kartu suara pemilih.
+  - Mempertahankan 4 bingkai sudut hijau neon, animasi laser scanner, dan lencana panduan tengah (*"Letakkan QR code di dalam frame"*).
+  - Tetap mendukung pemindai barcode fisik USB secara senyap (*background keydown buffer listener*) tanpa memerlukan kolom input teks di layar.
+  - Pembaruan unit test komprehensif pada `QRScannerGate.test.ts` dan `BilikSuaraPage.test.ts` (100% lulus, 16 berkas pengujian).
+
 
 ### Fixed
 - **Perbaikan Margin & Kerapian Tata Letak Cetak A4 Surat Undangan (`PrintableQRCards`)**:
