@@ -18,8 +18,10 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   isSelected = false,
   disabled = false
 }) => {
+  const isClickable = !disabled && !isSelected;
+
   const handleClick = () => {
-    if (disabled) return;
+    if (!isClickable) return;
     onSelect(candidate);
   };
 
@@ -29,19 +31,22 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   return (
     <div
       role="button"
-      tabIndex={0}
+      tabIndex={isClickable ? 0 : -1}
+      aria-disabled={!isClickable}
+      aria-pressed={isSelected}
       onClick={handleClick}
       onKeyDown={e => {
+        if (!isClickable) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           handleClick();
         }
       }}
-      aria-label={`Calon nomor ${displayNumber}: ${candidate.name}`}
-      className={`group relative flex flex-col items-center bg-white border-2 transition-all duration-150 cursor-pointer select-none w-full max-w-[260px] sm:max-w-[210px] md:max-w-[230px] lg:max-w-[240px] landscape:max-w-[155px] sm:landscape:max-w-[210px] md:landscape:max-w-[230px] ${
+      aria-label={`Calon nomor ${displayNumber}: ${candidate.name}${isSelected ? ' (Sudah dipilih)' : ''}`}
+      className={`group relative flex flex-col items-center bg-white border-2 transition-all duration-150 select-none w-full max-w-[260px] sm:max-w-[210px] md:max-w-[230px] lg:max-w-[240px] landscape:max-w-[155px] sm:landscape:max-w-[210px] md:landscape:max-w-[230px] ${
         isSelected
-          ? 'border-emerald-600 ring-4 ring-emerald-500/40 shadow-2xl scale-[1.02]'
-          : 'border-black hover:border-black hover:shadow-lg'
+          ? 'border-emerald-600 ring-4 ring-emerald-500/40 shadow-2xl scale-[1.02] cursor-default pointer-events-none'
+          : 'border-black hover:border-black hover:shadow-lg cursor-pointer active:scale-98'
       } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
       style={{
         touchAction: 'manipulation'

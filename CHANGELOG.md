@@ -5,6 +5,17 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.6] - 2026-11-20
+
+### Changed
+- **Penguncian Kartu Kandidat yang Sudah Dipilih (`CandidateCard` & `BilikSuaraPage`)**:
+  - Mengubah perilaku kartu calon ketika sudah berstatus terpilih (`isSelected = true`):
+    - Kartu yang sudah terpilih tidak dapat diklik atau ditekan lagi (*unclickable / pointer-events-none, cursor-default*), mencegah bunyi klik berulang, pengucapan suara ganda, atau pembukaan modal konfirmasi yang tidak disengaja.
+    - Untuk menyelesaikan pemilihan, pemilih diarahkan untuk menekan tombol merah resmi di bilah bawah: **"PILIH KANDIDAT INI"**.
+    - Calon lain yang belum terpilih tetap dapat diklik apabila pemilih ingin mengubah pilihannya sebelum menekan tombol konfirmasi.
+  - Menambahkan atribut aksesibilitas `aria-disabled="true"` dan `tabIndex={-1}` ketika kartu sudah terpilih.
+  - Memperbarui pengujian unit pada `CandidateCard.test.ts` (100% lulus, 16 berkas pengujian).
+
 ## [0.5.5] - 2026-11-20
 
 ### Changed

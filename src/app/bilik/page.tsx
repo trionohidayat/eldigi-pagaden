@@ -71,8 +71,13 @@ export default function BilikSuaraPage() {
     );
   }
 
-  // Handle touching/clicking a candidate card - selects candidate, double tap opens confirmation
+  // Handle touching/clicking a candidate card - selects candidate (cannot be re-clicked if already selected)
   const handleSelectCandidate = (candidate: Candidate) => {
+    // If candidate is already selected, do nothing (cannot be clicked again)
+    if (selectedCandidate?.id === candidate.id) {
+      return;
+    }
+
     playBeep('click');
     speak(
       language === 'su'
@@ -80,10 +85,6 @@ export default function BilikSuaraPage() {
         : `Calon nomor ${candidate.number}, ${candidate.name}`
     );
 
-    if (selectedCandidate?.id === candidate.id) {
-      setIsModalOpen(true);
-      return;
-    }
     setSelectedCandidate(candidate);
     setSelectionHint(false);
   };

@@ -42,6 +42,9 @@ describe('CandidateCard Component', () => {
     expect(html).toContain('border-emerald-600');
     expect(html).toContain('ring-emerald-500/40');
     expect(html).toContain('text-emerald-600');
+    expect(html).toContain('pointer-events-none');
+    expect(html).toContain('cursor-default');
+    expect(html).toContain('aria-disabled="true"');
     expect(html).not.toContain('border-red-600');
   });
 
