@@ -31,7 +31,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { href: '/bilik', label: 'Surat Suara (Bilik)', shortLabel: 'Bilik', icon: Vote, highlight: true },
     { href: '/kpps', label: 'Meja KPPS', shortLabel: 'KPPS', icon: Users },
-    { href: '/cetak-qr', label: 'Cetak Kartu QR', shortLabel: 'Cetak QR', icon: QrCode },
+    { href: '/cetak-qr', label: 'Surat Undangan C6', shortLabel: 'Undangan C6', icon: QrCode },
     { href: '/rekapitulasi', label: 'Rekapitulasi', shortLabel: 'Rekap', icon: BarChart3, badge: totalVotes },
     { href: '/panduan', label: 'Panduan', shortLabel: 'Panduan', icon: BookOpen }
   ];

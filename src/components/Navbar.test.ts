@@ -36,7 +36,7 @@ describe('Navbar Component Responsiveness & Navigation', () => {
     expect(html).toContain('Meja KPPS');
     expect(html).toContain('Rekapitulasi');
     expect(html).toContain('Panduan');
-    expect(html).toContain('Cetak Kartu QR');
+    expect(html).toContain('Surat Undangan C6');
 
     // Verifikasi kontrol navigasi mobile responsif
     expect(html).toContain('Buka menu navigasi');

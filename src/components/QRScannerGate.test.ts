@@ -95,7 +95,7 @@ describe('QRScannerGate & Tablet Camera Support', () => {
       );
 
       expect(html).toContain('Simulasi Cepat (Pilih Warga DPT):');
-      expect(html).toContain('Cetak Kartu QR');
+      expect(html).toContain('Cetak Undangan C6');
     });
 
     it('harus merender tombol toggle fitur Google Voice di header pemindai', () => {

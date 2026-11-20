@@ -193,7 +193,7 @@ export const KioskDrawer: React.FC = () => {
                 >
                   <div className="flex items-center gap-2.5">
                     <Printer className="w-4 h-4 text-emerald-600" />
-                    <span>Cetak Kartu QR Pemilih</span>
+                    <span>Cetak Surat Undangan (C6)</span>
                   </div>
                   <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
                     Siap Cetak

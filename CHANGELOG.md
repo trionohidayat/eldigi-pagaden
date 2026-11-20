@@ -5,6 +5,21 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-11-20
+
+### Added
+- **Desain Formulir Surat Undangan Pemungutan Suara Kepada Pemilih (Model C6 Digital) (`PrintableQRCards`)**:
+  - Mengubah desain kartu pemilih menjadi format resmi Surat Undangan Pemungutan Suara sesuai standar fisik Pilkades:
+    - **Kop Resmi**: Lambang Daerah Kabupaten Subang, judul 3 baris "SURAT UNDANGAN PEMUNGUTAN SUARA KEPADA PEMILIH", dan "No Urut DPT" (format 900-series).
+    - **Kotak Rahasia Merah & QR Code**: Kotak pembatas merah *"SURAT UNDANGAN INI BERSIFAT RAHASIA"* serta kotak instruksi *"Tunjukan QRcode berikut saat akan memilih"*.
+    - **Detail Pemilih & Jadwal**: Nama lengkap pemilih, NIK, Hari/Tanggal, Pukul, Nomor TPS, Alamat TPS, dan Nomor Bilik Suara.
+    - **Catatan Hukum & Keabsahan**: Klausul kerahasiaan undangan dan kewajiban membawa e-KTP.
+    - **Tanda Tangan & Cap Stempel Ungu Resmi**: Kolom tanda tangan penerima dan kolom Panitia Pemilihan lengkap dengan stempel bulat ungu dinas (*Panitia Pemilihan Kepala Desa Subang*) dan tanda tangan tinta biru.
+    - **Panduan Posisi Ibu Jari di Ujung Bawah**: Kotak instruksi *"Letakan posisi tangan ditengah-tengah ujung bawah persis seperti pada gambar untuk memudahkan proses scan QRCode"* beserta ilustrasi vektor jempol tegak di ujung kertas agar kode QR di sudut kiri atas tidak terhalang jari saat diarahkan ke kamera bilik suara.
+  - Opsi tata letak cetak (*Print Layout Toggle*): Pilihan format hemat kertas (2 undangan per lembar A4) atau 1 halaman penuh (A4) dengan garis pemotong (*cut marks*).
+  - Penyelarasan label navigasi pada Navbar, KioskDrawer, dan ScannerGate menjadi "Cetak Surat Undangan (C6)".
+  - Pembaruan unit testing otomatis pada `PrintableQRCards.test.ts`, `Navbar.test.ts`, dan `QRScannerGate.test.ts` (100% green passing).
+
 ## [0.5.0] - 2026-11-20
 
 ### Added

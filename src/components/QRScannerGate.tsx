@@ -481,7 +481,7 @@ export const QRScannerGate: React.FC<QRScannerGateProps> = ({ onAuthorized }) =>
                 className="ml-1 sm:ml-2 text-[10px] sm:text-[11px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 flex-shrink-0"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Cetak Kartu QR</span>
+                <span>Cetak Undangan C6</span>
               </Link>
             </div>
           </div>
