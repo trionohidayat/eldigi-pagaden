@@ -45,12 +45,12 @@ export default function PanduanPage() {
       title: language === 'su' ? 'Konfirmasi Pilihan (Tombol Bulao)' : 'Konfirmasi Pilihan (Tombol Biru)',
       desc:
         language === 'su'
-          ? 'Layar bakal nampilkeun konfirmasi. Upami parantos leres, toel tombol bulao YA, YAKIN. Upami lepat, toel tombol ULANGI kanggo milih deui.'
-          : 'Layar akan memunculkan dialog konfirmasi. Jika sudah mantap, tekan tombol biru YA, YAKIN. Jika ingin mengganti, tekan tombol ULANGI untuk memilih ulang.',
+          ? 'Layar bakal nampilkeun konfirmasi. Upami parantos leres, toel tombol bulao PILIH. Upami lepat, toel tombol ULANGI kanggo milih deui.'
+          : 'Layar akan memunculkan dialog konfirmasi. Jika sudah mantap, tekan tombol biru PILIH. Jika ingin mengganti, tekan tombol ULANGI untuk memilih ulang.',
       badge: language === 'su' ? 'Léngkah Katilu' : 'Langkah 3',
       color: 'bg-amber-600',
       audioText:
-        'Langkah 3. Periksa nama calon di layar konfirmasi. Tekan tombol biru YA, YAKIN jika sudah yakin, atau tekan ULANGI jika ingin memilih ulang.'
+        'Langkah 3. Periksa nama calon di layar konfirmasi. Tekan tombol biru PILIH jika sudah yakin, atau tekan ULANGI jika ingin memilih ulang.'
     },
     {
       step: '4',

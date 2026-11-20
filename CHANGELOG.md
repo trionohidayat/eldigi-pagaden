@@ -5,6 +5,14 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.7] - 2026-11-20
+
+### Changed
+- **Pembaruan Label Tombol Konfirmasi Menjadi "PILIH" (`ConfirmationModal`)**:
+  - Mengubah label teks tombol konfirmasi berwarna biru dari **"YA, YAKIN"** menjadi **"PILIH"** (`✓ PILIH`) sesuai preferensi tampilan antarmuka pemilih.
+  - Menyelaraskan teks panduan pemilih pada halaman panduan (`src/app/panduan/page.tsx`).
+  - Memperbarui pengujian unit pada `ConfirmationModal.test.ts` (100% lulus, 16 berkas pengujian).
+
 ## [0.5.6] - 2026-11-20
 
 ### Changed

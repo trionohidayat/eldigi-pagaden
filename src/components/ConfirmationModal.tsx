@@ -100,7 +100,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-blue-600 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-black text-xs sm:text-base flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/30 transition cursor-pointer"
           >
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[3]" />
-            <span>{language === 'su' ? 'YA, YAKIN' : 'YA, YAKIN'}</span>
+            <span>{language === 'su' ? 'PILIH' : 'PILIH'}</span>
           </button>
         </div>
       </div>

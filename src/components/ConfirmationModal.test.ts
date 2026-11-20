@@ -37,7 +37,8 @@ describe('ConfirmationModal Component', () => {
     expect(html).not.toContain('Uly Emarita AD,');
     expect(html).toContain('Calon Nomor Urut 2');
     expect(html).toContain('ULANGI');
-    expect(html).toContain('YA, YAKIN');
+    expect(html).toContain('PILIH');
+    expect(html).not.toContain('YA, YAKIN');
     expect(html).toContain('bg-blue-600');
     expect(html).toContain('border-blue-600');
   });
