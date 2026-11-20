@@ -35,14 +35,19 @@ describe('escposHelper for 58mm Thermal Receipt Printer (VSC TM-58V)', () => {
     const textDecoder = new TextDecoder();
     const textOutput = textDecoder.decode(bytes);
 
-    // Memuat identitas daerah & TPS
+    // Memuat identitas daerah & Pilkades Pagaden
     expect(textOutput).toContain('KABUPATEN SUBANG');
-    expect(textOutput).toContain('PILKADES DESA PAGADEN');
+    expect(textOutput).toContain('PILKADES PAGADEN');
+    expect(textOutput).not.toContain('PILKADES DESA PAGADEN');
     expect(textOutput).toContain('BUKTI SUARA DIGITAL (VVPAT)');
     expect(textOutput).toContain('PGD-TPS01-02-B7X9');
-    expect(textOutput).toContain('Cecep Supriatna');
 
-    // Kerahasiaan suara terjamin: TIDAK memuat nama calon kades yang dipilih
+    // Asas Rahasia & LUBER: TIDAK memuat identitas pemilih, TPS, waktu, atau pilihan calon
+    expect(textOutput).not.toContain('Cecep Supriatna');
+    expect(textOutput).not.toContain('Pemilih:');
+    expect(textOutput).not.toContain('TPS:');
+    expect(textOutput).not.toContain('Waktu:');
+    expect(textOutput).not.toContain('No. Bukti:');
     expect(textOutput).not.toContain('Uly Emarita AD');
     expect(textOutput).not.toContain('PILIHAN KEPALA DESA');
   });

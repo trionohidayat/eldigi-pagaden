@@ -41,9 +41,11 @@ describe('ThermalReceipt Component', () => {
     expect(html).not.toContain('NOMOR 2');
     expect(html).not.toContain('Uly Emarita AD');
 
-    // Struk tetap memuat bukti verifikasi autentik berupa HASH / No. Bukti dan instruksi kotak suara
+    // Struk tetap memuat bukti verifikasi autentik berupa KODE HASH VERIFIKASI dan instruksi kotak suara
     expect(html).toContain('PGD-TPS01-02-X7K9');
-    expect(html).toContain('HASH:');
+    expect(html).toContain('KODE HASH VERIFIKASI');
+    expect(html).toContain('PILKADES PAGADEN');
+    expect(html).not.toContain('PILKADES DESA PAGADEN');
     expect(html).toContain('Struk fisik ini adalah bukti sah pilihan Anda');
   });
 

@@ -24,7 +24,8 @@ export function formatTwoColumns(left: string, right: string, maxCols = 32): str
 /**
  * Generates ESC/POS byte sequence for thermal receipt (58mm)
  */
-export function createVVPATReceiptBytes(lastVote: LastVoteInfo, voterName?: string): Uint8Array {
+export function createVVPATReceiptBytes(lastVote: LastVoteInfo, _voterName?: string): Uint8Array {
+  void _voterName;
   const encoder = new TextEncoder();
   const buffer: number[] = [];
 
@@ -53,23 +54,13 @@ export function createVVPATReceiptBytes(lastVote: LastVoteInfo, voterName?: stri
   addBytes(GS, 0x21, 0x01);
   addText('KABUPATEN SUBANG\n');
   addBytes(GS, 0x21, 0x00);
-  addText('PILKADES DESA PAGADEN\n');
+  addText('PILKADES PAGADEN\n');
   addBytes(ESC, 0x45, 0x00);
 
   addText('BUKTI SUARA DIGITAL (VVPAT)\n');
   addText('--------------------------------\n');
 
-  // 3. Left Align for metadata (ESC a 0)
-  addBytes(ESC, 0x61, 0x00);
-  addText(formatTwoColumns('TPS:', lastVote.tps.slice(0, 26)));
-  addText(formatTwoColumns('Waktu:', lastVote.timestamp));
-  if (voterName) {
-    addText(formatTwoColumns('Pemilih:', voterName));
-  }
-  addText(formatTwoColumns('No. Bukti:', lastVote.receiptCode));
-  addText('--------------------------------\n');
-
-  // 4. Center Align for QR & Barcode (ESC a 1)
+  // 3. Center Align for QR & Barcode (ESC a 1)
   addBytes(ESC, 0x61, 0x01);
   addBytes(ESC, 0x45, 0x01);
   addText('KODE HASH VERIFIKASI\n');

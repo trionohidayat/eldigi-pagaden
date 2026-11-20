@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { LastVoteInfo, useVote } from '@/context/VoteContext';
 import { CrestSubang } from './CrestSubang';
 import QRCode from 'qrcode';
@@ -85,12 +85,20 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
     }
   }, [lastVote.receiptCode, qrSvg]);
 
+  // Guard to ensure auto-print only executes ONCE per vote receiptCode
+  const autoPrintedReceiptRef = useRef<string | null>(null);
+
   // Auto-print to connected Bluetooth printer (e.g. VSC TM-58V) on mount
   useEffect(() => {
     let isCancelled = false;
 
     async function handleAutoPrint() {
       if (isPrinterConnected && isAutoPrintEnabled) {
+        if (autoPrintedReceiptRef.current === lastVote.receiptCode) {
+          return;
+        }
+        autoPrintedReceiptRef.current = lastVote.receiptCode;
+
         const res = await printReceiptDirectly(lastVote, voterName);
         if (!isCancelled) {
           if (res.success) {
@@ -270,39 +278,30 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
           }}
         >
           {/* Receipt Header */}
-          <div className="text-center pb-3 border-b-2 border-dashed border-black flex flex-col items-center">
+          <div className="text-center pb-2.5 border-b-2 border-dashed border-black flex flex-col items-center">
             <div className="mb-1.5 flex justify-center">
               <CrestSubang size={36} />
             </div>
             <h4 className="font-extrabold text-xs uppercase tracking-wider">
-              PEMERINTAH KABUPATEN SUBANG
+              KABUPATEN SUBANG
             </h4>
             <div className="font-black text-xs uppercase">
-              PILKADES DESA PAGADEN
+              PILKADES PAGADEN
             </div>
             <div className="text-[10px] text-slate-700 font-bold uppercase mt-0.5">
-              BUKTI PEMUNGUTAN SUARA DIGITAL (VVPAT)
+              BUKTI SUARA DIGITAL (VVPAT)
             </div>
           </div>
 
-          {/* Metadata Section */}
-          <div className="py-2.5 border-b border-dashed border-black space-y-1 text-[11px]">
-            <div className="flex justify-between">
-              <span className="text-slate-600">TPS:</span>
-              <span className="font-bold">{lastVote.tps}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-600">Waktu:</span>
-              <span className="font-semibold">{lastVote.timestamp}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-600">No. Bukti:</span>
-              <span className="font-mono font-bold text-black">{lastVote.receiptCode}</span>
-            </div>
-          </div>
-
-          {/* Verification Section: QR Code & Barcode (Kerahasiaan Suara Terjaga - Tanpa Informasi Calon) */}
+          {/* Verification Section: Hash, QR Code & Barcode (Kerahasiaan Suara Terjaga - Asas LUBER) */}
           <div className="pt-3 pb-1 flex flex-col items-center text-center">
+            <div className="text-[11px] font-black tracking-wider text-black uppercase mb-0.5">
+              KODE HASH VERIFIKASI
+            </div>
+            <div className="font-mono text-xs font-bold text-black mb-2">
+              {lastVote.receiptCode}
+            </div>
+
             {/* QR Code representation */}
             {qrSvg && (
               <div
@@ -321,11 +320,14 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
                 />
               ))}
             </div>
-            <div className="text-[9px] font-mono text-slate-600 tracking-wider">
-              HASH: {lastVote.receiptCode}
+            <div className="text-[10px] font-mono font-bold text-black tracking-wider mb-2">
+              {lastVote.receiptCode}
             </div>
-            <p className="text-[9px] text-slate-600 italic mt-2.5 leading-tight">
-              &quot;Struk fisik ini adalah bukti sah pilihan Anda. Masukkan ke dalam kotak suara fisik.&quot;
+
+            <div className="w-full border-t border-dashed border-black my-2" />
+
+            <p className="text-[9px] text-slate-700 font-sans leading-tight mt-0.5">
+              Struk fisik ini adalah bukti sah pilihan Anda. Lipat &amp; masukkan ke dalam kotak suara fisik.
             </p>
           </div>
         </div>

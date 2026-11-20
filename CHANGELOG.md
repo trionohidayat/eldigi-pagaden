@@ -5,6 +5,18 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.5] - 2026-11-20
+
+### Changed
+- **Penyederhanaan Tata Letak Cetak Struk Bukti Suara / VVPAT (`escposHelper` & `ThermalReceipt`)**:
+  - Menyesuaikan hasil cetak printer thermal (VSC TM-58V, 58mm) sesuai tanda silang merah pada foto hasil cetak fisik pemilih:
+    - **Header**: Menghilangkan kata *"DESA"* sehingga judul menjadi **"PILKADES PAGADEN"** (bukan *"PILKADES DESA PAGADEN"*), serta menjaga judul Kabupaten Subang dan BUKTI SUARA DIGITAL (VVPAT) tercetak satu kali secara rapi dan presisi.
+    - **Penghapusan Metadata Asas LUBER**: Menghilangkan blok informasi TPS (`TPS: TPS 01`), Waktu (`Waktu:`), Nama Pemilih (`Pemilih:`), dan baris Nomor Bukti dari kertas struk guna menjamin kerahasiaan pilihan pemilih saat struk dilipat dan dimasukkan ke dalam kotak suara fisik.
+    - **Verifikasi Bersih**: Hanya memuat KODE HASH VERIFIKASI, kode acak unik verifikasi, QR Code resmi, Barcode CODE128, dan petunjuk resmi kotak suara.
+    - **Perlindungan Cetak Ganda (*Auto-Print Deduplication Guard*)**: Menambahkan `autoPrintedReceiptRef` pada `ThermalReceipt.tsx` untuk memastikan proses cetak otomatis printer Bluetooth/USB hanya dijalankan tepat satu kali per sesi pemilihan (`receiptCode`).
+  - Menyelaraskan tampilan struk virtual di layar (`#vvpat-receipt`) agar identik dengan cetakan fisik printer thermal.
+  - Pembaruan unit tests pada `escposHelper.test.ts` dan `ThermalReceipt.test.ts` (100% lulus, 16 berkas pengujian).
+
 ## [0.5.4] - 2026-11-20
 
 ### Changed
