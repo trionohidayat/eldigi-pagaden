@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useVote, LastVoteInfo } from '@/context/VoteContext';
 import { CANDIDATES, Candidate } from '@/data/candidates';
 import { CandidateCard } from '@/components/CandidateCard';
@@ -9,14 +9,18 @@ import { ThermalReceipt } from '@/components/ThermalReceipt';
 import { CrestSubang } from '@/components/CrestSubang';
 import { KioskDrawer } from '@/components/KioskDrawer';
 import { QRScannerGate } from '@/components/QRScannerGate';
-import { UserCheck, X } from 'lucide-react';
+import { UserCheck, X, Volume2, VolumeX } from 'lucide-react';
 
 export default function BilikSuaraPage() {
   const {
     language,
     activeVoter,
     completeActiveVoter,
-    castVote
+    castVote,
+    isVoiceEnabled,
+    toggleVoice,
+    speak,
+    playBeep
   } = useVote();
 
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
@@ -24,6 +28,18 @@ export default function BilikSuaraPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptData, setReceiptData] = useState<LastVoteInfo | null>(null);
   const [selectionHint, setSelectionHint] = useState(false);
+
+  // Announce welcome and instructions when active voter enters the ballot screen
+  useEffect(() => {
+    if (activeVoter && !receiptData) {
+      speak(
+        language === 'su'
+          ? `Kamar sora digital dibuka kanggo ${activeVoter.name}. Mangga toel foto atanapi nomer calon Kuwu pilihan anjeun.`
+          : `Surat suara digital terbuka untuk ${activeVoter.name}. Silakan sentuh foto atau nomor calon Kepala Desa pilihan Anda.`
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeVoter?.nik]);
 
   // After receipt is printed / finished, reset active voter and return automatically to QR Scanner!
   const handleFinishSession = () => {
@@ -57,6 +73,13 @@ export default function BilikSuaraPage() {
 
   // Handle touching/clicking a candidate card - selects candidate, double tap opens confirmation
   const handleSelectCandidate = (candidate: Candidate) => {
+    playBeep('click');
+    speak(
+      language === 'su'
+        ? `Calon nomer ${candidate.number}, ${candidate.name}`
+        : `Calon nomor ${candidate.number}, ${candidate.name}`
+    );
+
     if (selectedCandidate?.id === candidate.id) {
       setIsModalOpen(true);
       return;
@@ -68,11 +91,23 @@ export default function BilikSuaraPage() {
   // Handle clicking the red bottom bar "PILIH KANDIDAT INI" - triggers confirmation popup
   const handleBottomBarClick = () => {
     if (!selectedCandidate) {
+      playBeep('warning');
+      speak(
+        language === 'su'
+          ? 'Punten toel salah sahiji kotak calon di luhur heula.'
+          : 'Silakan sentuh salah satu kotak calon di atas terlebih dahulu.'
+      );
       setSelectionHint(true);
       setTimeout(() => setSelectionHint(false), 2500);
       return;
     }
 
+    playBeep('beep');
+    speak(
+      language === 'su'
+        ? `Konfirmasi pamilihan. Naha anjeun yakin milih calon nomer ${selectedCandidate.number}, ${selectedCandidate.name}?`
+        : `Konfirmasi pilihan. Apakah Anda yakin memilih calon nomor ${selectedCandidate.number}, ${selectedCandidate.name}?`
+    );
     setIsModalOpen(true);
   };
 
@@ -84,11 +119,19 @@ export default function BilikSuaraPage() {
     if (!selectedCandidate) return;
 
     setIsSubmitting(true);
+    playBeep('success');
     const voteResult = castVote(selectedCandidate.id);
 
     setIsSubmitting(false);
     setIsModalOpen(false);
     setReceiptData(voteResult);
+
+    playBeep('print');
+    speak(
+      language === 'su'
+        ? 'Hatur nuhun, hak sora anjeun parantos hasil kacatet. Mangga candak struk buktos pamilihan.'
+        : 'Terima kasih, hak suara Anda telah berhasil disimpan. Silakan ambil struk bukti pemilihan.'
+    );
   };
 
   return (
@@ -126,6 +169,18 @@ export default function BilikSuaraPage() {
             <span className="font-bold truncate max-w-[130px] sm:max-w-none">{activeVoter.name}</span>
             <span className="text-slate-300">•</span>
             <span className="font-mono text-[10px] sm:text-[11px] text-slate-600 flex-shrink-0">NIK: {activeVoter.nik}</span>
+            <button
+              type="button"
+              onClick={toggleVoice}
+              title={isVoiceEnabled ? 'Matikan Panduan Suara Google Voice' : 'Aktifkan Panduan Suara Google Voice'}
+              className={`p-1 rounded-full transition flex-shrink-0 cursor-pointer ${
+                isVoiceEnabled
+                  ? 'text-emerald-700 hover:bg-emerald-100'
+                  : 'text-slate-400 hover:bg-slate-200'
+              }`}
+            >
+              {isVoiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            </button>
             <button
               type="button"
               onClick={completeActiveVoter}

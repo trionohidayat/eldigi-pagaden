@@ -14,7 +14,10 @@ import {
   Vote,
   ShieldCheck,
   CheckCircle2,
-  Printer
+  Printer,
+  Volume2,
+  VolumeX,
+  Bluetooth
 } from 'lucide-react';
 
 export const KioskDrawer: React.FC = () => {
@@ -29,8 +32,50 @@ export const KioskDrawer: React.FC = () => {
     toggleLanguage,
     resetAllData,
     totalVotes,
-    tpsConfig
+    tpsConfig,
+    isVoiceEnabled,
+    toggleVoice,
+    isPrinterConnected,
+    printerDeviceName,
+    isAutoPrintEnabled,
+    toggleAutoPrint,
+    connectPrinter,
+    connectUsbPrinter,
+    disconnectPrinterDevice,
+    printTestReceipt
   } = useVote();
+
+  const [printerMessage, setPrinterMessage] = useState<string | null>(null);
+
+  const handleConnectBt = async () => {
+    setPrinterMessage(null);
+    const res = await connectPrinter();
+    if (!res.success) {
+      setPrinterMessage(res.error || 'Gagal');
+      setTimeout(() => setPrinterMessage(null), 4000);
+    }
+  };
+
+  const handleConnectUsb = async () => {
+    setPrinterMessage(null);
+    const res = await connectUsbPrinter();
+    if (!res.success) {
+      setPrinterMessage(res.error || 'Gagal');
+      setTimeout(() => setPrinterMessage(null), 4000);
+    }
+  };
+
+  const handleTestPrint = async () => {
+    setPrinterMessage(null);
+    const res = await printTestReceipt();
+    if (res.success) {
+      setPrinterMessage('Uji cetak berhasil dikirim ke printer!');
+      setTimeout(() => setPrinterMessage(null), 3000);
+    } else {
+      setPrinterMessage(res.error || 'Gagal mencetak');
+      setTimeout(() => setPrinterMessage(null), 4000);
+    }
+  };
 
   const handleResetSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -166,7 +211,7 @@ export const KioskDrawer: React.FC = () => {
                 <button
                   type="button"
                   onClick={toggleLanguage}
-                  className="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm font-semibold text-slate-700 transition"
+                  className="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm font-semibold text-slate-700 transition cursor-pointer"
                 >
                   <div className="flex items-center gap-2.5">
                     <Globe className="w-4 h-4 text-slate-500" />
@@ -176,6 +221,120 @@ export const KioskDrawer: React.FC = () => {
                     {language === 'su' ? 'Basa Sunda' : 'Indonesia'}
                   </span>
                 </button>
+
+                {/* Google Voice Assistance Switch */}
+                <button
+                  type="button"
+                  onClick={toggleVoice}
+                  className="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm font-semibold text-slate-700 transition cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    {isVoiceEnabled ? (
+                      <Volume2 className="w-4 h-4 text-emerald-600" />
+                    ) : (
+                      <VolumeX className="w-4 h-4 text-slate-400" />
+                    )}
+                    <span>Panduan Suara (Google Voice)</span>
+                  </div>
+                  <span
+                    className={`text-xs font-mono font-bold px-2.5 py-1 rounded-md ${
+                      isVoiceEnabled
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {isVoiceEnabled ? 'Aktif' : 'Mati'}
+                  </span>
+                </button>
+
+                {/* Printer Thermal VSC TM-58V Setup Card */}
+                <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+                      <Printer className="w-4 h-4 text-slate-700" />
+                      <span>Printer VSC TM-58V (58mm)</span>
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        isPrinterConnected
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {isPrinterConnected ? 'Terhubung' : 'Terputus'}
+                    </span>
+                  </div>
+
+                  {printerDeviceName && (
+                    <div className="text-[11px] font-mono text-emerald-700 font-bold bg-white px-2.5 py-1 rounded-lg border border-emerald-200 truncate">
+                      {printerDeviceName}
+                    </div>
+                  )}
+
+                  {printerMessage && (
+                    <div className="text-[11px] font-semibold text-slate-700 bg-white p-2 rounded-lg border border-slate-300 animate-in fade-in">
+                      {printerMessage}
+                    </div>
+                  )}
+
+                  {/* Printer Connection Buttons */}
+                  <div className="grid grid-cols-2 gap-1.5 pt-1">
+                    {!isPrinterConnected ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={handleConnectBt}
+                          className="py-1.5 px-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer shadow-xs"
+                        >
+                          <Bluetooth className="w-3.5 h-3.5" />
+                          <span>Bluetooth</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleConnectUsb}
+                          className="py-1.5 px-2 bg-slate-800 hover:bg-black text-white rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer shadow-xs"
+                        >
+                          <span>Kabel USB</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          onClick={handleTestPrint}
+                          className="py-1.5 px-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer shadow-xs"
+                        >
+                          <span>Uji Cetak</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={disconnectPrinterDevice}
+                          className="py-1.5 px-2 border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer"
+                        >
+                          <span>Putuskan</span>
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Auto-print Toggle */}
+                  <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                    <span className="text-[11px] font-semibold text-slate-600">
+                      Cetak Otomatis (Auto-Print)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={toggleAutoPrint}
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-bold cursor-pointer ${
+                        isAutoPrintEnabled
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {isAutoPrintEnabled ? 'ON' : 'OFF'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 

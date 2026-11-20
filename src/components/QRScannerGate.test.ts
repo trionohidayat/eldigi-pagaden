@@ -97,5 +97,18 @@ describe('QRScannerGate & Tablet Camera Support', () => {
       expect(html).toContain('Simulasi Cepat (Pilih Warga DPT):');
       expect(html).toContain('Cetak Kartu QR');
     });
+
+    it('harus merender tombol toggle fitur Google Voice di header pemindai', () => {
+      const onAuthorized = vi.fn();
+      const html = renderToStaticMarkup(
+        React.createElement(
+          VoteProvider,
+          null,
+          React.createElement(QRScannerGate, { onAuthorized })
+        )
+      );
+
+      expect(html).toContain('Google Voice: Aktif');
+    });
   });
 });

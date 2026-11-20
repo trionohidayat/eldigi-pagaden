@@ -1,8 +1,16 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { CANDIDATES } from '@/data/candidates';
 import { INITIAL_DPT, Voter } from '@/data/dpt';
+import { speakText, stopSpeech, playSoundEffect, SoundEffectType } from '@/utils/voiceHelper';
+import {
+  connectBluetoothPrinter as requestBluetooth,
+  connectSerialPrinter as requestSerial,
+  disconnectPrinter as closePrinter,
+  printVVPATReceipt as printReceipt,
+  printDiagnosticTest as printTest
+} from '@/utils/bluetoothPrinter';
 
 export type LanguageMode = 'id' | 'su';
 
@@ -35,12 +43,25 @@ interface VoteContextType {
   language: LanguageMode;
   tpsConfig: TPSConfig;
   lastVote: LastVoteInfo | null;
+  isVoiceEnabled: boolean;
+  isPrinterConnected: boolean;
+  printerDeviceName: string | null;
+  isAutoPrintEnabled: boolean;
   castVote: (candidateId: number) => LastVoteInfo;
   authorizeVoter: (nik: string) => boolean;
   completeActiveVoter: () => void;
   resetAllData: (pin: string) => boolean;
   toggleLanguage: () => void;
   setLanguage: (lang: LanguageMode) => void;
+  toggleVoice: () => void;
+  toggleAutoPrint: () => void;
+  connectPrinter: () => Promise<{ success: boolean; deviceName?: string; error?: string }>;
+  connectUsbPrinter: () => Promise<{ success: boolean; deviceName?: string; error?: string }>;
+  disconnectPrinterDevice: () => void;
+  printReceiptDirectly: (lastVote: LastVoteInfo, voterName?: string) => Promise<{ success: boolean; error?: string }>;
+  printTestReceipt: () => Promise<{ success: boolean; error?: string }>;
+  speak: (text: string, options?: { lang?: string; rate?: number }) => void;
+  playBeep: (type?: SoundEffectType) => void;
 }
 
 const DEFAULT_TPS: TPSConfig = {
@@ -59,7 +80,9 @@ const STORAGE_KEYS = {
   VOTES: 'eldigi_votes_v1',
   VOTERS: 'eldigi_voters_v1',
   LANG: 'eldigi_lang_v1',
-  LAST_VOTE: 'eldigi_last_vote_v1'
+  LAST_VOTE: 'eldigi_last_vote_v1',
+  VOICE: 'eldigi_voice_v1',
+  AUTO_PRINT: 'eldigi_autoprint_v1'
 };
 
 export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -68,6 +91,10 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [activeVoter, setActiveVoter] = useState<Voter | null>(null);
   const [language, setLanguageState] = useState<LanguageMode>('id');
   const [lastVote, setLastVote] = useState<LastVoteInfo | null>(null);
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
+  const [isPrinterConnected, setIsPrinterConnected] = useState(false);
+  const [printerDeviceName, setPrinterDeviceName] = useState<string | null>(null);
+  const [isAutoPrintEnabled, setIsAutoPrintEnabled] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Load from localStorage on mount
@@ -93,6 +120,16 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (savedLastVote) {
           setLastVote(JSON.parse(savedLastVote));
         }
+
+        const savedVoice = localStorage.getItem(STORAGE_KEYS.VOICE);
+        if (savedVoice !== null) {
+          setIsVoiceEnabled(savedVoice !== 'false');
+        }
+
+        const savedAutoPrint = localStorage.getItem(STORAGE_KEYS.AUTO_PRINT);
+        if (savedAutoPrint !== null) {
+          setIsAutoPrintEnabled(savedAutoPrint !== 'false');
+        }
       } catch {
         // Storage access error handling
       }
@@ -101,6 +138,21 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Save to localStorage when state changes
+  useEffect(() => {
+    if (!isHydrated) return;
+    try {
+      localStorage.setItem(STORAGE_KEYS.VOICE, String(isVoiceEnabled));
+    } catch {}
+  }, [isVoiceEnabled, isHydrated]);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    try {
+      localStorage.setItem(STORAGE_KEYS.AUTO_PRINT, String(isAutoPrintEnabled));
+    } catch {}
+  }, [isAutoPrintEnabled, isHydrated]);
 
   // Save to localStorage when state changes
   useEffect(() => {
@@ -220,6 +272,91 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLanguage(nextLang);
   };
 
+  const toggleVoice = useCallback(() => {
+    setIsVoiceEnabled(prev => {
+      const next = !prev;
+      try {
+        localStorage.setItem(STORAGE_KEYS.VOICE, String(next));
+      } catch {}
+
+      if (!next) {
+        stopSpeech();
+      } else {
+        playSoundEffect('success');
+        speakText('Panduan suara Google Voice diaktifkan.');
+      }
+      return next;
+    });
+  }, []);
+
+  const speak = useCallback(
+    (text: string, options?: { lang?: string; rate?: number }) => {
+      if (!isVoiceEnabled) return;
+      speakText(text, options);
+    },
+    [isVoiceEnabled]
+  );
+
+  const playBeep = useCallback(
+    (type: SoundEffectType = 'beep') => {
+      if (!isVoiceEnabled) return;
+      playSoundEffect(type);
+    },
+    [isVoiceEnabled]
+  );
+
+  const toggleAutoPrint = useCallback(() => {
+    setIsAutoPrintEnabled(prev => !prev);
+  }, []);
+
+  const connectPrinter = useCallback(async () => {
+    const res = await requestBluetooth();
+    if (res.success) {
+      setIsPrinterConnected(true);
+      setPrinterDeviceName(res.deviceName || 'VSC TM-58V');
+      playSoundEffect('success');
+      if (isVoiceEnabled) {
+        speakText('Printer Bluetooth VSC TM-58V berhasil terhubung.');
+      }
+    }
+    return res;
+  }, [isVoiceEnabled]);
+
+  const connectUsbPrinter = useCallback(async () => {
+    const res = await requestSerial();
+    if (res.success) {
+      setIsPrinterConnected(true);
+      setPrinterDeviceName(res.deviceName || 'VSC TM-58V (USB)');
+      playSoundEffect('success');
+    }
+    return res;
+  }, []);
+
+  const disconnectPrinterDevice = useCallback(() => {
+    closePrinter();
+    setIsPrinterConnected(false);
+    setPrinterDeviceName(null);
+  }, []);
+
+  const printReceiptDirectly = useCallback(
+    async (voteData: LastVoteInfo, voter?: string) => {
+      const res = await printReceipt(voteData, voter);
+      if (res.success) {
+        playSoundEffect('print');
+      }
+      return res;
+    },
+    []
+  );
+
+  const printTestReceipt = useCallback(async () => {
+    const res = await printTest();
+    if (res.success) {
+      playSoundEffect('print');
+    }
+    return res;
+  }, []);
+
   return (
     <VoteContext.Provider
       value={{
@@ -230,12 +367,25 @@ export const VoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         language,
         tpsConfig: DEFAULT_TPS,
         lastVote,
+        isVoiceEnabled,
+        isPrinterConnected,
+        printerDeviceName,
+        isAutoPrintEnabled,
         castVote,
         authorizeVoter,
         completeActiveVoter,
         resetAllData,
         toggleLanguage,
-        setLanguage
+        setLanguage,
+        toggleVoice,
+        toggleAutoPrint,
+        connectPrinter,
+        connectUsbPrinter,
+        disconnectPrinterDevice,
+        printReceiptDirectly,
+        printTestReceipt,
+        speak,
+        playBeep
       }}
     >
       {children}

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Candidate } from '@/data/candidates';
 import { CandidateAvatar } from './CandidateAvatar';
-import { Check, X } from 'lucide-react';
+import { Check, RotateCcw } from 'lucide-react';
 
 interface ConfirmationModalProps {
   candidate: Candidate | null;
@@ -81,7 +81,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             : `Apakah Anda yakin memilih Calon No. ${displayNumber}?`}
         </p>
 
-        {/* Action Buttons: Minimalist Batal & Ya */}
+        {/* Action Buttons: Minimalist Ulangi & Ya */}
         <div className="w-full grid grid-cols-2 gap-2.5 sm:gap-3 mt-4 sm:mt-6">
           <button
             type="button"
@@ -89,15 +89,15 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             disabled={isSubmitting}
             className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-black bg-white hover:bg-slate-100 active:scale-95 text-black font-bold text-xs sm:text-base flex items-center justify-center gap-1.5 transition cursor-pointer"
           >
-            <X className="w-4 h-4 text-slate-700" />
-            <span>{language === 'su' ? 'BATAL' : 'BATAL'}</span>
+            <RotateCcw className="w-4 h-4 text-slate-700" />
+            <span>{language === 'su' ? 'ULANGI' : 'ULANGI'}</span>
           </button>
 
           <button
             type="button"
             onClick={handleConfirm}
             disabled={isSubmitting}
-            className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-emerald-600 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs sm:text-base flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-600/30 transition cursor-pointer"
+            className="py-2.5 sm:py-3.5 px-3 sm:px-4 border-2 border-blue-600 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-black text-xs sm:text-base flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/30 transition cursor-pointer"
           >
             <Check className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[3]" />
             <span>{language === 'su' ? 'YA, YAKIN' : 'YA, YAKIN'}</span>

@@ -12,13 +12,15 @@ import {
   ArrowLeft,
   QrCode,
   Menu,
-  X
+  X,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { CrestSubang } from './CrestSubang';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { totalVotes } = useVote();
+  const { totalVotes, isVoiceEnabled, toggleVoice } = useVote();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Hide Navbar completely on voting ballot and print screens to keep them 100% minimalist
@@ -78,10 +80,45 @@ export const Navbar: React.FC = () => {
                 </Link>
               );
             })}
+            {/* Google Voice Toggle */}
+            <button
+              type="button"
+              onClick={toggleVoice}
+              title={isVoiceEnabled ? 'Matikan Panduan Suara Google Voice' : 'Aktifkan Panduan Suara Google Voice'}
+              className={`p-2 rounded-lg border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ml-1 ${
+                isVoiceEnabled
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                  : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'
+              }`}
+            >
+              {isVoiceEnabled ? (
+                <>
+                  <Volume2 className="w-4 h-4 text-emerald-600 animate-pulse" />
+                  <span className="text-[11px]">Suara: On</span>
+                </>
+              ) : (
+                <>
+                  <VolumeX className="w-4 h-4 text-slate-400" />
+                  <span className="text-[11px]">Suara: Off</span>
+                </>
+              )}
+            </button>
           </nav>
 
           {/* Mobile Menu Button (below md) */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-1.5">
+            <button
+              type="button"
+              onClick={toggleVoice}
+              title="Toggle Suara"
+              className={`p-2 rounded-xl border text-xs font-bold transition flex items-center cursor-pointer ${
+                isVoiceEnabled
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  : 'bg-slate-50 text-slate-500 border-slate-200'
+              }`}
+            >
+              {isVoiceEnabled ? <Volume2 className="w-4 h-4 text-emerald-600" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+            </button>
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

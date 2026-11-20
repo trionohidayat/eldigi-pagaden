@@ -8,11 +8,12 @@ import {
   CheckCircle2,
   HelpCircle,
   ArrowRight,
-  Vote
+  Vote,
+  Volume2
 } from 'lucide-react';
 
 export default function PanduanPage() {
-  const { language } = useVote();
+  const { language, speak, playBeep } = useVote();
 
   const steps = [
     {
@@ -41,15 +42,15 @@ export default function PanduanPage() {
     },
     {
       step: '3',
-      title: language === 'su' ? 'Konfirmasi Pilihan (Tombol Hejo)' : 'Konfirmasi Pilihan (Tombol Hijau)',
+      title: language === 'su' ? 'Konfirmasi Pilihan (Tombol Bulao)' : 'Konfirmasi Pilihan (Tombol Biru)',
       desc:
         language === 'su'
-          ? 'Layar bakal nampilkeun konfirmasi. Upami parantos leres, toel tombol hejo LERES. Upami lepat, toel tombol BATAL kanggo ngulang.'
-          : 'Layar akan memunculkan dialog konfirmasi. Jika sudah mantap, tekan tombol hijau YA. Jika ingin mengganti, tekan tombol BATAL untuk memilih ulang.',
+          ? 'Layar bakal nampilkeun konfirmasi. Upami parantos leres, toel tombol bulao YA, YAKIN. Upami lepat, toel tombol ULANGI kanggo milih deui.'
+          : 'Layar akan memunculkan dialog konfirmasi. Jika sudah mantap, tekan tombol biru YA, YAKIN. Jika ingin mengganti, tekan tombol ULANGI untuk memilih ulang.',
       badge: language === 'su' ? 'Léngkah Katilu' : 'Langkah 3',
       color: 'bg-amber-600',
       audioText:
-        'Langkah 3. Periksa nama calon di layar konfirmasi. Tekan tombol hijau YA jika sudah yakin, atau tekan BATAL jika ingin memilih ulang.'
+        'Langkah 3. Periksa nama calon di layar konfirmasi. Tekan tombol biru YA, YAKIN jika sudah yakin, atau tekan ULANGI jika ingin memilih ulang.'
     },
     {
       step: '4',
@@ -72,8 +73,8 @@ export default function PanduanPage() {
     {
       q: 'Upami abdi lepat noel foto, naha tiasa digentos?',
       qId: 'Bagaimana jika saya salah menyentuh foto calon?',
-      a: 'Bisa pisan! Saatos anjeun noel foto, sistem bakal naroskeun heula dina layar konfirmasi. Upami salah, kantun toel tombol abu-abu BATAL / PILIH DEUI sarta anjeun tiasa milih deui calon anu leres.',
-      aId: 'Sangat bisa! Setelah menyentuh foto, sistem akan menampilkan jendela konfirmasi terlebih dahulu. Jika salah sentuh, cukup tekan tombol BATAL / PILIH ULANG dan Anda bisa memilih kembali foto yang benar.'
+      a: 'Bisa pisan! Saatos anjeun noel foto, sistem bakal naroskeun heula dina layar konfirmasi. Upami salah, kantun toel tombol ULANGI sarta anjeun tiasa milih deui calon anu leres.',
+      aId: 'Sangat bisa! Setelah menyentuh foto, sistem akan menampilkan jendela konfirmasi terlebih dahulu. Jika salah sentuh, cukup tekan tombol ULANGI dan Anda bisa memilih kembali foto yang benar.'
     },
     {
       q: 'Naha sora abdi tiasa kanyahoan ku batur?',
@@ -140,7 +141,20 @@ export default function PanduanPage() {
               </div>
 
               <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-                <span className="flex items-center gap-1 text-emerald-600 font-semibold">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playBeep('click');
+                    speak(s.audioText, { lang: language === 'su' ? 'su-ID' : 'id-ID' });
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200 text-emerald-800 border border-emerald-200 text-xs font-bold transition cursor-pointer"
+                  title="Dengarkan panduan suara Google Voice"
+                >
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Dengar Suara</span>
+                </button>
+
+                <span className="flex items-center gap-1 text-emerald-600 font-semibold text-[11px] sm:text-xs">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Sangat Mudah &amp; Cepat</span>
                 </span>

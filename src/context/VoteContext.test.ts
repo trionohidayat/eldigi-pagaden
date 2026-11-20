@@ -126,4 +126,32 @@ describe('VoteContext State & Voting Flow', () => {
     expect(resetWrongPin).toBe(false);
     expect(resetSuccess).toBe(true);
   });
+
+  it('menyediakan status panduan suara (Google Voice) aktif secara default dan dapat di-toggle', () => {
+    let initialVoiceState = false;
+    let voiceCallableWithoutError = false;
+
+    const TestConsumer = () => {
+      const { isVoiceEnabled, toggleVoice, speak, playBeep } = useVote();
+      initialVoiceState = isVoiceEnabled;
+      try {
+        speak('Uji suara pemilih');
+        playBeep('beep');
+        toggleVoice();
+        voiceCallableWithoutError = true;
+      } catch {}
+      return React.createElement('div', null, 'Voice Test');
+    };
+
+    renderToStaticMarkup(
+      React.createElement(
+        VoteProvider,
+        null,
+        React.createElement(TestConsumer)
+      )
+    );
+
+    expect(initialVoiceState).toBe(true);
+    expect(voiceCallableWithoutError).toBe(true);
+  });
 });

@@ -85,4 +85,16 @@ describe('ThermalReceipt Component', () => {
     expect(html).toContain('HATUR NUHUN');
     expect(html).toContain('Pilihan Anjeun Parantos Kasimpen');
   });
+
+  it('harus menyediakan tombol koneksi printer Bluetooth VSC TM-58V', () => {
+    const html = renderToStaticMarkup(
+      React.createElement(ThermalReceipt, {
+        lastVote: mockLastVote,
+        onFinish: () => {},
+        language: 'id'
+      })
+    );
+    expect(html).toContain('Hubungkan Printer Bluetooth (VSC TM-58V)');
+    expect(html).toContain('Cetak Fisik');
+  });
 });

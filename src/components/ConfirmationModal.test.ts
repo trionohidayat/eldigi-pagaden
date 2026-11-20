@@ -36,10 +36,10 @@ describe('ConfirmationModal Component', () => {
     expect(html).not.toContain('S.E., M.M.');
     expect(html).not.toContain('Uly Emarita AD,');
     expect(html).toContain('Calon Nomor Urut 2');
-    expect(html).toContain('BATAL');
+    expect(html).toContain('ULANGI');
     expect(html).toContain('YA, YAKIN');
-    expect(html).toContain('bg-emerald-600');
-    expect(html).toContain('border-emerald-600');
+    expect(html).toContain('bg-blue-600');
+    expect(html).toContain('border-blue-600');
   });
 
   it('mendukung bahasa Sunda dalam dialog konfirmasi', () => {

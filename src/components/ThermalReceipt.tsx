@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { LastVoteInfo } from '@/context/VoteContext';
+import React, { useEffect, useState, useCallback } from 'react';
+import { LastVoteInfo, useVote } from '@/context/VoteContext';
 import { CrestSubang } from './CrestSubang';
 import QRCode from 'qrcode';
 import confetti from 'canvas-confetti';
-import { Printer, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Printer, ArrowRight, CheckCircle2, Bluetooth, AlertCircle } from 'lucide-react';
 
 interface ThermalReceiptProps {
   lastVote: LastVoteInfo;
@@ -15,6 +15,13 @@ interface ThermalReceiptProps {
   autoResetSeconds?: number;
 }
 
+const defaultConnectPrinter = async (): Promise<{ success: boolean; deviceName?: string; error?: string }> => ({ success: false });
+const defaultPrintReceiptDirectly = async (_vote: LastVoteInfo, _voterName?: string): Promise<{ success: boolean; error?: string }> => {
+  void _vote;
+  void _voterName;
+  return { success: false };
+};
+
 export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
   lastVote,
   voterName,
@@ -22,8 +29,26 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
   language = 'id',
   autoResetSeconds = 5
 }) => {
+  let isPrinterConnected = false;
+  let printerDeviceName: string | null = null;
+  let isAutoPrintEnabled = true;
+  let connectPrinter = defaultConnectPrinter;
+  let printReceiptDirectly = defaultPrintReceiptDirectly;
+
+  try {
+    const voteContext = useVote();
+    isPrinterConnected = voteContext.isPrinterConnected;
+    printerDeviceName = voteContext.printerDeviceName;
+    isAutoPrintEnabled = voteContext.isAutoPrintEnabled;
+    connectPrinter = voteContext.connectPrinter;
+    printReceiptDirectly = voteContext.printReceiptDirectly;
+  } catch {
+    // Graceful fallback when rendered in isolated test environment without VoteProvider
+  }
+
   const [countdown, setCountdown] = useState(autoResetSeconds);
   const [isPrinted, setIsPrinted] = useState(false);
+  const [printError, setPrintError] = useState<string | null>(null);
   const [qrSvg, setQrSvg] = useState<string>(() => {
     try {
       let initialSvg = '';
@@ -60,6 +85,35 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
     }
   }, [lastVote.receiptCode, qrSvg]);
 
+  // Auto-print to connected Bluetooth printer (e.g. VSC TM-58V) on mount
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function handleAutoPrint() {
+      if (isPrinterConnected && isAutoPrintEnabled) {
+        const res = await printReceiptDirectly(lastVote, voterName);
+        if (!isCancelled) {
+          if (res.success) {
+            setIsPrinted(true);
+          } else {
+            setPrintError(res.error || 'Gagal mengirim data ke printer Bluetooth.');
+          }
+        }
+      } else {
+        const timer = setTimeout(() => {
+          if (!isCancelled) setIsPrinted(true);
+        }, 800);
+        return () => clearTimeout(timer);
+      }
+    }
+
+    handleAutoPrint();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isPrinterConnected, isAutoPrintEnabled, lastVote, voterName, printReceiptDirectly]);
+
   useEffect(() => {
     // Subtle celebratory confetti
     try {
@@ -69,12 +123,6 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
         origin: { y: 0.4 }
       });
     } catch {}
-
-    const timer = setTimeout(() => {
-      setIsPrinted(true);
-    }, 800);
-
-    return () => clearTimeout(timer);
   }, []);
 
   // Countdown timer to automatically reset to QR scan gate
@@ -89,8 +137,38 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
     return () => clearInterval(interval);
   }, [countdown, onFinish]);
 
-  const handleManualPrint = () => {
-    window.print();
+  const handleManualPrint = useCallback(async () => {
+    if (isPrinterConnected) {
+      setPrintError(null);
+      const res = await printReceiptDirectly(lastVote, voterName);
+      if (res.success) {
+        setIsPrinted(true);
+      } else {
+        setPrintError(res.error || 'Gagal mencetak.');
+      }
+    } else {
+      // Prompt user to connect Bluetooth printer or fallback to system print
+      const res = await connectPrinter();
+      if (res.success) {
+        const printRes = await printReceiptDirectly(lastVote, voterName);
+        if (printRes.success) {
+          setIsPrinted(true);
+        }
+      } else {
+        // Fallback to standard system print dialog
+        window.print();
+      }
+    }
+  }, [isPrinterConnected, connectPrinter, printReceiptDirectly, lastVote, voterName]);
+
+  const handleConnectBluetooth = async () => {
+    const res = await connectPrinter();
+    if (res.success) {
+      const printRes = await printReceiptDirectly(lastVote, voterName);
+      if (printRes.success) {
+        setIsPrinted(true);
+      }
+    }
   };
 
   return (
@@ -138,14 +216,39 @@ export const ThermalReceipt: React.FC<ThermalReceiptProps> = ({
           </span>
         </div>
 
-        {/* Printing status pill */}
-        <div className="mt-2 inline-flex items-center gap-2 bg-white/90 border border-emerald-400 text-emerald-950 px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span>
-            {isPrinted
-              ? 'Struk Fisik Berhasil Dicetak'
-              : 'Sedang Mencetak Struk Suara (VVPAT)...'}
-          </span>
+        {/* Printing status & Bluetooth printer indicator */}
+        <div className="mt-2 flex flex-col items-center gap-1.5">
+          {isPrinterConnected ? (
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-950 text-[11px] sm:text-xs font-bold shadow-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+              <span>Printer Bluetooth: {printerDeviceName || 'VSC TM-58V'} (Aktif)</span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleConnectBluetooth}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 hover:bg-white border border-blue-400 text-blue-900 text-[11px] sm:text-xs font-bold shadow-xs transition cursor-pointer active:scale-95"
+            >
+              <Bluetooth className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
+              <span>Hubungkan Printer Bluetooth (VSC TM-58V)</span>
+            </button>
+          )}
+
+          <div className="inline-flex items-center gap-2 bg-white/90 border border-emerald-400 text-emerald-950 px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>
+              {isPrinted
+                ? 'Struk Fisik Berhasil Dicetak'
+                : 'Sedang Mencetak Struk Suara (VVPAT)...'}
+            </span>
+          </div>
+
+          {printError && (
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-300 text-rose-800 text-[10px] sm:text-[11px] font-semibold">
+              <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+              <span>{printError}</span>
+            </div>
+          )}
         </div>
 
         <p className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">

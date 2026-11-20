@@ -5,6 +5,29 @@ Format ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id/1.1.0/)
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-20
+
+### Added
+- **Konektivitas Printer Thermal Bluetooth & USB Barcode VSC TM-58V (`bluetoothPrinter` & `escposHelper`)**:
+  - Implementasi driver Web Bluetooth API (`navigator.bluetooth`) dan Web Serial API (`navigator.serial`) untuk printer thermal kasir/barcode model VSC TM-58V lebar kertas 58mm.
+  - Generator byte command ESC/POS standar 32 kolom untuk pencetakan struk fisik VVPAT (*Voter Verified Paper Audit Trail*), QR Code Model 2, dan Barcode CODE128.
+  - Kartu manajemen printer pada drawer bilik suara (`KioskDrawer`) lengkap dengan tombol hubungkan Bluetooth/USB, status perangkat, sakelar cetak otomatis (*auto-print*), dan tombol *test print*.
+  - Mekanisme pengiriman bertahap (*packet chunking 64 bytes*) untuk mencegah *buffer overrun* pada mikrokontroler printer Bluetooth.
+- **Reaktivasi Fitur Panduan Suara Google Voice & Efek Audio (`voiceHelper`)**:
+  - Mengintegrasikan kembali sistem pemandu suara text-to-speech berbasis Web Speech API dengan prioritas mesin suara Google Bahasa Indonesia (`id-ID`) dan Basa Sunda (`su-ID`).
+  - Efek audio sintesis Web Audio API (100% offline) untuk nada konfirmasi (*beep*), verifikasi sukses (*two-tone chime*), peringatan (*warning tone*), klik calon (*selection click*), dan simulasi cetak struk (*print flutter*).
+  - Panduan suara interaktif pada seluruh alur pemilihan (scan QR, bilik suara, dan halaman panduan warga).
+  - Tombol kontrol toggle suara (Google Voice: Aktif / Mati) di header scanner, bilik suara, drawer kiosk panitia, dan navbar.
+- **Desain Viewfinder Scan QR Lebar Penuh (*Widescreen Tablet Mode*)**:
+  - Menyesuaikan tampilan pemindai QR agar immersif dan melebar proporsional (`max-w-6xl` hingga `max-w-7xl` rasio 16:9 / 16:10) sesuai referensi perangkat tablet di bilik suara.
+  - Kartu instruksi mengambang di atas viewfinder (*floating header*) dengan teks dinamis DPT serta 4 sudut hijau pemindai neon (`#22c55e`) dan badge tengah *"Letakkan QR code di dalam frame"*.
+
+### Changed
+- **Pembaruan Warna Tombol & Label Dialog Konfirmasi (`ConfirmationModal`)**:
+  - Mengubah warna tombol konfirmasi **"YA, YAKIN"** dari warna hijau menjadi warna **biru** (`bg-blue-600 hover:bg-blue-700 border-blue-600 shadow-blue-600/30`).
+  - Mengubah label tombol batal menjadi **"ULANGI"** dengan ikon `RotateCcw` (`↺ ULANGI`) agar pemilih dapat mengulang pemilihan jika salah sentuh.
+  - Menyelaraskan teks instruksi dan panduan suara pada `PanduanPage`.
+
 ## [0.4.4] - 2026-11-14
 
 ### Changed
